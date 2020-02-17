@@ -9,7 +9,6 @@
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
-    <link rel="stylesheet" th:href="@{/css/Header-Blue.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
     <link rel="stylesheet" th:href="@{/css/smoothproducts.css}">
 </head>
@@ -37,22 +36,16 @@
             <div class="block-heading">
                 <h2 class="text-info">Работающие системы</h2>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" id="systems_table">
                         <thead>
                         <tr>
                             <th>Состав</th>
                             <th>№ Электропоезда</th>
-                            <th>Номер системы</th>
+                            <th>№ Сиситемы</th>
                             <th>Статус</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Cell 1</td>
-                            <td>Cell 2</td>
-                            <td>Cell 1</td>
-                            <td>Cell 1</td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -69,6 +62,7 @@
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
 <script th:src="@{/js/smoothproducts.min.js}"></script>
+<script th:src="@{/js/systems.js}"></script>
 <script th:src="@{/js/theme.js}"></script>
 </body>
 

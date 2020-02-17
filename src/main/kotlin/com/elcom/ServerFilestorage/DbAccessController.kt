@@ -5,6 +5,7 @@ import com.elcom.ServerFilestorage.model.Measure
 import com.elcom.ServerFilestorage.model.Reply
 import com.elcom.ServerFilestorage.repository.DeviceRepository
 import com.elcom.ServerFilestorage.repository.MeasuresRepository
+import com.elcom.ServerFilestorage.repository.SystemRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -16,7 +17,8 @@ open class DbAccessController {
     lateinit var measuresRepository: MeasuresRepository
     @Autowired
     lateinit var deviceRepository: DeviceRepository
-
+    @Autowired
+    lateinit var systemRepository: SystemRepository
 
     @GetMapping("/measures")
     fun getMeasures(@RequestParam count: Int): List<Measure> {
@@ -27,6 +29,11 @@ open class DbAccessController {
     @GetMapping("/devices")
     fun getDevices(@RequestParam count: Int): List<Device> {
         return deviceRepository.findAll()
+    }
+
+    @GetMapping("/systems")
+    fun getSystems(): List<com.elcom.ServerFilestorage.model.System> {
+        return systemRepository.findAll()
     }
 
     @GetMapping("/adddevice")
@@ -42,10 +49,8 @@ open class DbAccessController {
                     swVer = swVer,
                     hwVer = hwVer,
                     configLink = configLink))
-        }
-        catch(e:org.postgresql.util.PSQLException)
-        {
-            reply=Reply("${e.message}",1)
+        } catch (e: org.postgresql.util.PSQLException) {
+            reply = Reply("${e.message}", 1)
         }
         return reply
     }

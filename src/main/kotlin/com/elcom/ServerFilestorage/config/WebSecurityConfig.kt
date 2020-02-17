@@ -13,7 +13,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager
 @EnableWebSecurity
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
-        http!!.authorizeRequests().antMatchers("/").permitAll()
+        http!!.authorizeRequests().antMatchers("/","/js/**","/bootstrap/**","/css/**","/img/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
