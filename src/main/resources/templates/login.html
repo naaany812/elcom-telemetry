@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Login - Телеметрическая информационная система ТИС-20</title>
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" th:href="@{/css/Header-Blue.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" th:href="@{/css/smoothproducts.css}">
+</head>
+
+<body>
+<main class="page login-page">
+    <section class="clean-block clean-form dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">Телеметрическая информационная система ТИС-20</h2>
+                <p>Авторизация с помощью логина и пароля</p>
+            </div>
+            <div th:if="${param.error}">
+                Invalid username and password.
+            </div>
+            <div th:if="${param.logout}">
+                You have been logged out.
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="form-group"><label for="username">Логин</label><input class="form-control item" type="text"
+                                                                               id="username" name="username"></div>
+                <div class="form-group"><label for="password">Пароль</label><input class="form-control" type="password"
+                                                                                   id="password" name="password"></div>
+                <div class="form-group">
+                    <div class="form-check"><input class="form-check-input" type="checkbox" id="checkbox"><label
+                            class="form-check-label" for="checkbox">Запомнить меня</label></div>
+                </div>
+                <button class="btn btn-primary btn-block" type="submit">Вход</button>
+            </form>
+        </div>
+    </section>
+</main>
+<footer class="page-footer dark" style="padding: 0px 0px 0px;">
+    <div class="footer-copyright" style="margin: 0px 0px 0px;">
+        <p>© 2020 Elcom Company</p>
+    </div>
+</footer>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+<script th:src="@{/js/smoothproducts.min.js}"></script>
+<script th:src="@{/js/theme.js}"></script>
+</body>
+
+</html>
