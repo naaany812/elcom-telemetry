@@ -8,6 +8,7 @@ import com.elcom.ServerFilestorage.repository.MeasuresRepository
 import com.elcom.ServerFilestorage.repository.SystemRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.sql.Date
 
 @RestController
 @RequestMapping("/api")
@@ -21,9 +22,13 @@ open class DbAccessController {
     lateinit var systemRepository: SystemRepository
 
     @GetMapping("/measures")
-    fun getMeasures(@RequestParam count: Int): List<Measure> {
+    fun getMeasures(@RequestParam(required = false) startDate: Date?, @RequestParam(required = false) endDate: Date?, @RequestParam(required = false) systemId: Int?): List<Measure> {
         //  measuresRepository.
-        return measuresRepository.findAll()
+        if (startDate != null && endDate != null && systemId != null) {
+            println("range formed")
+            return measuresRepository.getRangeForSystem(startDate, endDate, systemId)
+        } else
+            return measuresRepository.findAll()
     }
 
     @GetMapping("/devices")
@@ -49,6 +54,17 @@ open class DbAccessController {
                     swVer = swVer,
                     hwVer = hwVer,
                     configLink = configLink))
+        } catch (e: org.postgresql.util.PSQLException) {
+            reply = Reply("${e.message}", 1)
+        }
+        return reply
+    }
+
+    @PostMapping(path = arrayOf("/addmeasure"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    fun addOrUpdateMeasure(@RequestBody measure: Measure): Reply {
+        var reply = Reply("OK")
+        try {
+            measuresRepository.save(measure)
         } catch (e: org.postgresql.util.PSQLException) {
             reply = Reply("${e.message}", 1)
         }

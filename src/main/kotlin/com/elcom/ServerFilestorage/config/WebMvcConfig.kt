@@ -14,12 +14,14 @@ class WebMvcConfig : WebMvcConfigurerAdapter() {
         registry.addResourceHandler(
                 "/webjars/**",
                 "/img/**",
+                "/fonts/**",
                 "/bootstrap/**",
                 "/css/**",
                 "/js/**")
                 .addResourceLocations(
                         "classpath:/META-INF/resources/webjars/",
                         "classpath:/static/img/",
+                        "classpath:/static/fonts/",
                         "classpath:/static/bootstrap/",
                         "classpath:/static/css/",
                         "classpath:/static/js/")

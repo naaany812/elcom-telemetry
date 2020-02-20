@@ -1,0 +1,17 @@
+.table thead th {
+  position: sticky;
+  top: 0;
+}
+
+.table {
+  table-layout: fixed;
+  /*border-collapse: collapse;*/
+  width: 100%;
+}
+
+.table {
+  overflow-y: auto;
+  /*height: 100%;*/
+  /*max-height: 400px;*/
+}
+

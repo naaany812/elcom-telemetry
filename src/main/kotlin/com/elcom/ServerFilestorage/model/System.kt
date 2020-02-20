@@ -15,7 +15,8 @@ data class System(
 
         @Column(name = "train_type")
         val trainType: String,
-
+        @Column(name = "train_number")
+        val trainNumber: String,
         @Column(name = "system_id")
         val systemId: Int,
 
