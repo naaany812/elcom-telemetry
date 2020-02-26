@@ -47,7 +47,11 @@ CREATE TABLE public.devices (
     hw_ver integer DEFAULT 0,
     sw_ver integer DEFAULT 0,
     config_link text,
-    device_head_id integer
+    train_id integer,
+    type integer,
+    car_number integer,
+    device_head_id integer,
+    name text
 );
 
 
@@ -143,6 +147,7 @@ CREATE TABLE public.systems (
     train_number text,
     system_id integer,
     status integer,
+    car_count integer,
     head_device_id integer
 );
 
@@ -196,12 +201,12 @@ ALTER TABLE ONLY public.systems ALTER COLUMN id SET DEFAULT nextval('public.syst
 -- Data for Name: devices; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.devices (id, device_hw_id, device_hw_head_id, hw_ver, sw_ver, config_link, device_head_id) FROM stdin;
-1	2281337	2281337	1	1	here	\N
-3	1337	2281337	1	1	there	\N
-4	228	2281337	1	1	elsewhere	\N
-5	322	2281337	1	1	nowhere	\N
-6	1488	1488	1	1	hellothere	\N
+COPY public.devices (id, device_hw_id, device_hw_head_id, hw_ver, sw_ver, config_link, train_id, type, car_number, device_head_id, name) FROM stdin;
+4	228	2281337	1	1	elsewhere	8800	0	4	\N	БКТ
+5	322	2281337	1	1	nowhere	8800	0	3	\N	БИУ
+3	1337	2281337	1	1	there	8800	0	2	\N	БКТЭ
+1	2281337	2281337	1	1	here	8800	0	1	\N	МУО
+6	1488	1488	1	1	hellothere	8801	0	1	\N	ДТ
 \.
 
 
@@ -224,6 +229,7 @@ COPY public.measures (id, system_id, coordinates, date, rssi, wattage, temperatu
 13	8800	1	2020-02-20	1	250	28	1	1	1	228	05:37:13
 14	8800	1	2020-02-20	1	250	26.6	1	1	1	1337	00:46:04
 15	8800	1	2020-02-20	1	250	26.7	1	1	1	1337	03:58:17
+17	8800	5553	2020-02-19	1	32	45	1	1	1	1337	16:33:44
 \.
 
 
@@ -231,9 +237,10 @@ COPY public.measures (id, system_id, coordinates, date, rssi, wattage, temperatu
 -- Data for Name: systems; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.systems (id, train_type, train_number, system_id, status, head_device_id) FROM stdin;
-1	РЖОМБА	1488	8800	1	2281337
-2	ТОМАС	41-45 повторим?	8801	1	1488
+COPY public.systems (id, train_type, train_number, system_id, status, car_count, head_device_id) FROM stdin;
+0	ЭД4М	6007	8800	1	8	\N
+1	ЭД4М	6810	8801	1	4	\N
+14	ЭД4М	1488	351120146	0	12	\N
 \.
 
 
@@ -248,7 +255,7 @@ SELECT pg_catalog.setval('public.devices_id_seq', 6, true);
 -- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.hibernate_sequence', 1, false);
+SELECT pg_catalog.setval('public.hibernate_sequence', 17, true);
 
 
 --
@@ -262,7 +269,7 @@ SELECT pg_catalog.setval('public.measures_id_seq', 15, true);
 -- Name: systems_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.systems_id_seq', 2, true);
+SELECT pg_catalog.setval('public.systems_id_seq', 5, false);
 
 
 --
@@ -333,6 +340,14 @@ CREATE UNIQUE INDEX systems_system_id_uindex ON public.systems USING btree (syst
 
 
 --
+-- Name: devices devices_train_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.devices
+    ADD CONSTRAINT devices_train_fk FOREIGN KEY (train_id) REFERENCES public.systems(system_id);
+
+
+--
 -- Name: measures fke542pg0echtc7ey5to0r693cl; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -354,14 +369,6 @@ ALTER TABLE ONLY public.devices
 
 ALTER TABLE ONLY public.measures
     ADD CONSTRAINT measures_system_if_fk FOREIGN KEY (system_id) REFERENCES public.systems(system_id);
-
-
---
--- Name: systems systems_head_device_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.systems
-    ADD CONSTRAINT systems_head_device_fk FOREIGN KEY (head_device_id) REFERENCES public.devices(device_hw_id);
 
 
 --

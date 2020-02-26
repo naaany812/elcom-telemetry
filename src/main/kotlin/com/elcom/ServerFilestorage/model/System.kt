@@ -6,7 +6,7 @@ import javax.persistence.*
 @Table(name = "systems")
 data class System(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE)
         val id: Int = -1,
 
 //        @ManyToOne(cascade = [CascadeType.ALL])
@@ -19,10 +19,11 @@ data class System(
         val trainNumber: String,
         @Column(name = "system_id")
         val systemId: Int,
-
+        @Column(name = "car_count")
+        val carCount: Int,
         @Column(name = "status")
         val status: Int,
 
         @Column(name = "head_device_id")
-        val headDeviceId: Int
+        var headDeviceId: Int?
 )

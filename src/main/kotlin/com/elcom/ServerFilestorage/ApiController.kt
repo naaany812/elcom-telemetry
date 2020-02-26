@@ -1,5 +1,6 @@
 package com.elcom.ServerFilestorage
 
+import com.elcom.ServerFilestorage.model.CarType
 import com.elcom.ServerFilestorage.model.Device
 import com.elcom.ServerFilestorage.model.Measure
 import com.elcom.ServerFilestorage.model.Reply
@@ -12,7 +13,7 @@ import java.sql.Date
 
 @RestController
 @RequestMapping("/api")
-open class DbAccessController {
+open class ApiController {
 
     @Autowired
     lateinit var measuresRepository: MeasuresRepository
@@ -32,8 +33,14 @@ open class DbAccessController {
     }
 
     @GetMapping("/devices")
-    fun getDevices(@RequestParam count: Int): List<Device> {
-        return deviceRepository.findAll()
+    fun getDevices(@RequestParam(required = false) trainId: Int?, @RequestParam(required = false) onlyHead: Boolean?): List<Device> {
+        if (trainId != null) {
+            if (onlyHead != null)
+                return deviceRepository.getHeadDevicesFromTrain(trainId)
+            else
+                return deviceRepository.getDevicesFromTrain(trainId)
+        } else
+            return deviceRepository.findAll()
     }
 
     @GetMapping("/systems")
@@ -45,7 +52,9 @@ open class DbAccessController {
     fun addOrUpdateDevice(@RequestParam id: Int,
                           @RequestParam swVer: Int,
                           @RequestParam hwVer: Int,
+                          @RequestParam name: String,
                           @RequestParam headId: Int,
+                          @RequestParam type: CarType,
                           @RequestParam configLink: String): Reply {
         var reply = Reply("OK")
         try {
@@ -53,18 +62,33 @@ open class DbAccessController {
                     deviceHead = headId,
                     swVer = swVer,
                     hwVer = hwVer,
-                    configLink = configLink))
+                    name = name,
+                    configLink = configLink,
+                    type = type))
         } catch (e: org.postgresql.util.PSQLException) {
             reply = Reply("${e.message}", 1)
         }
         return reply
     }
 
-    @PostMapping(path = arrayOf("/addmeasure"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    @PostMapping(path = arrayOf("/add/measures"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addOrUpdateMeasure(@RequestBody measure: Measure): Reply {
         var reply = Reply("OK")
+        println("Measure added: $measure")
         try {
             measuresRepository.save(measure)
+        } catch (e: org.postgresql.util.PSQLException) {
+            reply = Reply("${e.message}", 1)
+        }
+        return reply
+    }
+
+    @PostMapping(path = arrayOf("/add/systems"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    fun addOrUpdateSystem(@RequestBody system: com.elcom.ServerFilestorage.model.System): Reply {
+        var reply = Reply("OK")
+        println("Train added: $system")
+        try {
+            systemRepository.save(system)
         } catch (e: org.postgresql.util.PSQLException) {
             reply = Reply("${e.message}", 1)
         }

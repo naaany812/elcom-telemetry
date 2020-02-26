@@ -19,35 +19,42 @@ import java.util.*
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http!!.cors().and().csrf().disable()
-        http!!.authorizeRequests().antMatchers("/","/js/**","/bootstrap/**","/css/**","/fonts/**","/img/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/measures",true)
-                .and()
-                .logout()
-                .permitAll()
-                .invalidateHttpSession(true)
-                .logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID")
+//        http!!.authorizeRequests().antMatchers("/", "/js/**", "/bootstrap/**", "/css/**", "/fonts/**", "/img/**").permitAll()
+//                .anyRequest().authenticated()
+//                .antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/measures", true)
+//                .and()
+//                .logout()
+//                .permitAll()
+//                .invalidateHttpSession(true)
+//                .logoutSuccessUrl("/login")
+//                .deleteCookies("JSESSIONID")
     }
 
     @Bean
     override fun userDetailsService(): UserDetailsService {
-        var user = User.withDefaultPasswordEncoder()
+        var admin = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("admin")
-                .roles("ADMIN")
+                .roles("USER", "ADMIN")
                 .build()
-        return InMemoryUserDetailsManager(user)
+        var user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("user")
+                .roles("USER")
+                .build()
+        return InMemoryUserDetailsManager(user, admin)
     }
+
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource? {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = Arrays.asList("*")
-        configuration.allowedMethods = Arrays.asList("*")
-        configuration.allowedHeaders = Arrays.asList("*")
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("*")
+        configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
