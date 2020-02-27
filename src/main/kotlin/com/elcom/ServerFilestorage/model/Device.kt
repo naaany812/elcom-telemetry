@@ -26,7 +26,8 @@ data class Device
         val deviceHead: Int = 0,
         @Column(name = "name")
         val name: String = "",
-
+        @Column(name = "train_id")
+        val trainId: Int,
         @Column(name = "hw_ver")
         val hwVer: Int = 0,
         @Column(name = "sw_ver")

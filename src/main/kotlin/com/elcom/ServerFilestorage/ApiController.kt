@@ -48,23 +48,12 @@ open class ApiController {
         return systemRepository.findAll()
     }
 
-    @GetMapping("/adddevice")
-    fun addOrUpdateDevice(@RequestParam id: Int,
-                          @RequestParam swVer: Int,
-                          @RequestParam hwVer: Int,
-                          @RequestParam name: String,
-                          @RequestParam headId: Int,
-                          @RequestParam type: CarType,
-                          @RequestParam configLink: String): Reply {
+    @PostMapping(path = arrayOf("/add/devices"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    fun addOrUpdateDevice(@RequestBody device: Device): Reply {
         var reply = Reply("OK")
+        println("Device added: $device")
         try {
-            deviceRepository.save(Device(deviceHwId = id,
-                    deviceHead = headId,
-                    swVer = swVer,
-                    hwVer = hwVer,
-                    name = name,
-                    configLink = configLink,
-                    type = type))
+            deviceRepository.save(device)
         } catch (e: org.postgresql.util.PSQLException) {
             reply = Reply("${e.message}", 1)
         }

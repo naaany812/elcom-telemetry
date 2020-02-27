@@ -23,21 +23,21 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http!!.cors().and().csrf().disable()
-        http!!.authorizeRequests().antMatchers("/", "/js/**", "/bootstrap/**", "/css/**", "/fonts/**", "/img/**").permitAll()
-        http!!.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
-
-        http!!.authorizeRequests().and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/measures", true)
-                .and()
-                .logout()
-                .permitAll()
-                .invalidateHttpSession(true)
-                .logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID")
-
-        http!!.authorizeRequests().anyRequest().authenticated()
+//        http!!.authorizeRequests().antMatchers("/", "/js/**", "/bootstrap/**", "/css/**", "/fonts/**", "/img/**").permitAll()
+//        http!!.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
+//
+//        http!!.authorizeRequests().and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .defaultSuccessUrl("/measures", true)
+//                .and()
+//                .logout()
+//                .permitAll()
+//                .invalidateHttpSession(true)
+//                .logoutSuccessUrl("/login")
+//                .deleteCookies("JSESSIONID")
+//
+//        http!!.authorizeRequests().anyRequest().authenticated()
     }
 
     @Bean

@@ -18,7 +18,7 @@ function refreshData() {
 }
 
 function refreshTrains() {
-    $.getJSON("/api/systems",
+    $.getJSON("http://localhost:8080/api/systems",
         function (data) {
             window.trains = data
             var table = document.getElementById('table_trains').getElementsByTagName('tbody')[0];
@@ -50,7 +50,7 @@ function refreshTrains() {
 
 function loadDevices(id) {
 
-    $.getJSON("api/devices?trainId=" + id,
+    $.getJSON("http://localhost:8080/api/devices?trainId=" + id,
         function (data) {
             window.currentDevices = data
             var table = document.getElementById('table_devices').getElementsByTagName('tbody')[0];
@@ -61,11 +61,15 @@ function loadDevices(id) {
                 //     console.log(k, v);
                 // var keys = ["trainType", "trainNumber"];
                 var tr = table.insertRow()
-                var cell = tr.insertCell()
+                if (v.deviceHwId)
+                    var cell = tr.insertCell()
                 var newText = document.createTextNode(v.carNumber)
                 cell.appendChild(newText)
 
-                if (v.deviceHwId == v.deviceHead) { headDev.push(v) }
+                if (v.deviceHwId == v.deviceHead) {
+                    headDev.push(v)
+                    tr.classList.add("table-primary")
+                }
 
                 var text = ""
 
@@ -81,6 +85,10 @@ function loadDevices(id) {
 
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(v.deviceHwId)
+                cell2.appendChild(newText2)
+
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.deviceHead)
                 cell2.appendChild(newText2)
 
                 var cell2 = tr.insertCell()
@@ -127,25 +135,94 @@ function setListeners() {
         extractTrain()
         refreshTrains()
     });
+    $("#button_add_device").on('click', function (e) {
+        if (selectedTrain != undefined) {
+            $("#modal_add_device").modal('show');
+        }
+        else {
+            alert("Для добавления устройства выберите электропоезд!");
+        }
+    });
+
+    $("#button_save_device").on('click', function (e) {
+        addDevice();
+        loadDevices(selectedTrain.systemId);
+    });
     $("#checkbox_head").on('click', function (e) {
         check();
     });
     $("#modal_add_device").on('show.bs.modal', function () {
-        loadHeadDevicesToList()
+        loadHeadDevicesToList();
     });
 }
 
 function loadHeadDevicesToList() {
-
-}
-
-function addDevice() {
     if (selectedTrain != undefined) {
+        $.getJSON("http://localhost:8080/api/devices?trainId=" + selectedTrain.systemId + "&onlyHead=true",
+            function (data) {
+                window.headDevices = data
+                var table = document.getElementById('table_trains').getElementsByTagName('tbody')[0];
+                $("#head_devices_modal_list option").remove();
+                // console.log(data.responseData.resultText)
+                var select = document.getElementById("head_devices_modal_list")
+                $.each(data, function (k, v) {
+                    //     console.log(k, v);
+                    // var keys = ["trainType", "trainNumber"];
+                    var tr = "(" + v.carNumber + ") " + v.deviceHwId
+                    var option = document.createElement("option")
+                    option.label = tr
+                    option.value = "" + v.deviceHwId
+                    select.add(option)
+                });
+            }
 
+        );
     }
     else {
         alert("Для добавления устройства выберите электропоезд!")
     }
+}
+
+function addDevice() {
+    if (selectedTrain != undefined) {
+        var deviceHwId = parseInt(document.getElementById("text_device_id").value, 10);
+        var deviceHead = deviceHwId
+
+        if (!document.getElementById('checkbox_head').checked) {
+            var select = document.getElementById("head_devices_modal_list")
+            deviceHead = parseInt(select.value, 10)
+        }
+        var carNumber = parseInt(document.getElementById("text_car_number").value, 10);
+        var type = document.getElementById("select_car_types").value
+        var name = document.getElementById("select_device_types").value
+        var tid = selectedTrain.systemId
+        let device =
+        {
+            deviceHwId: deviceHwId,
+            deviceHead: deviceHead,
+            carNumber: carNumber,
+            type: type,
+            name: name,
+            trainId: tid
+        }
+        if (carNumber <= selectedTrain.carCount) {
+            console.log(device)
+            sendJson(JSON.stringify(device), "http://localhost:8080/api/add/devices")
+            $('#modal_add_device').modal('hide');
+        }
+        else {
+            var error = "Ошибка: \n"
+            if (typeof deviceHwId != 'number')
+                error = error + "идентификатор не численный тип\n"
+            if (typeof deviceHead != 'number')
+                error = error + "идентификатор головного устройства не численный тип\n"
+            if (carNumber > selectedTrain.carCount)
+                error = error + "номер вагона превышает допустимый\n"
+
+            alert(error)
+        }
+    }
+
 
 }
 
