@@ -53,7 +53,12 @@ open class WebMvcController {
 
         return "systems"
     }
+    @RequestMapping("/admin")
+    @Throws(IOException::class)
+    open fun getAdmin(model: Model): String {
 
+        return "admin"
+    }
     @RequestMapping("/measures")
     @Throws(IOException::class)
     open fun getMeasures(model: Model): String {

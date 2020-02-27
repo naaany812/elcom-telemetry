@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml https://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
     <meta charset="utf-8">
@@ -53,9 +53,9 @@
     </div>
 </div>
 <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar" style="height: 120px;width: 100%;">
-    <div class="container"><a class="navbar-brand logo" href="#" style="height: 83px;padding-bottom: 0px;">Телеметрическая
-        информационная система ТИС-20<h1 class="display-4"
-                                         style="font-size: 13px;padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;color: rgba(0,0,0,0.6);width: 836px;height: 36px;">
+    <div class="container"><a class="navbar-brand logo" href="#" style="height: 83px;padding-bottom: 0px;">АСКРМПС<br>
+        <h1 class="display-4"
+            style="font-size: 13px;padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;color: rgba(0,0,0,0.6);width: 500px;height: 36px;">
             <br>Автоматизированная система контроля работы<br>моторвагонного подвижного состава<br><br></h1></a>
         <button
                 data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
@@ -63,6 +63,7 @@
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="nav navbar-nav ml-auto"></ul>
             <ul class="nav navbar-nav">
+                <li th:if="${#request.isUserInRole('ADMIN')}" class="nav-item" role="presentation"><a class="nav-link" th:href="@{/admin}">Администрирование</a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" th:href="@{/logout}">Выход</a></li>
             </ul>
         </div>

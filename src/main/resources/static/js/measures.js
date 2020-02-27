@@ -68,7 +68,7 @@ $(document).ready(function () {
     }, function (start, end, label) {
         $("#table_measures_content tbody tr").remove();
         console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-        $.getJSON("/api/measures?startDate=" + start.format('YYYY-MM-DD') + "&endDate=" + end.format('YYYY-MM-DD') + "&systemId=" + window.systemId + "",
+        $.getJSON("http://localhost:8080/api/measures?startDate=" + start.format('YYYY-MM-DD') + "&endDate=" + end.format('YYYY-MM-DD') + "&systemId=" + window.systemId + "",
             function (data) {
                 var table = document.getElementById('table_measures_content').getElementsByTagName('tbody')[0];
                 var mapClimate = {}
@@ -282,7 +282,7 @@ function buildTableSystems() {
             }
         });
     }); */
-    $.getJSON("/api/systems",
+    $.getJSON("http://localhost:8080/api/systems",
         function (data) {
             window.trains = data
             var table = document.getElementById('table_modal').getElementsByTagName('tbody')[0];

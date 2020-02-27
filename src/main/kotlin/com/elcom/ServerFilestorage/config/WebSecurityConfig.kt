@@ -2,6 +2,7 @@ package com.elcom.ServerFilestorage.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Description
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -11,7 +12,10 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import java.util.*
+import org.springframework.web.servlet.ViewResolver
+import org.thymeleaf.spring5.SpringTemplateEngine
+import org.thymeleaf.spring5.view.ThymeleafViewResolver
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 
 
 @Configuration
@@ -19,19 +23,21 @@ import java.util.*
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http!!.cors().and().csrf().disable()
-//        http!!.authorizeRequests().antMatchers("/", "/js/**", "/bootstrap/**", "/css/**", "/fonts/**", "/img/**").permitAll()
-//                .anyRequest().authenticated()
-//                .antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/measures", true)
-//                .and()
-//                .logout()
-//                .permitAll()
-//                .invalidateHttpSession(true)
-//                .logoutSuccessUrl("/login")
-//                .deleteCookies("JSESSIONID")
+        http!!.authorizeRequests().antMatchers("/", "/js/**", "/bootstrap/**", "/css/**", "/fonts/**", "/img/**").permitAll()
+        http!!.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
+
+        http!!.authorizeRequests().and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/measures", true)
+                .and()
+                .logout()
+                .permitAll()
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/login")
+                .deleteCookies("JSESSIONID")
+
+        http!!.authorizeRequests().anyRequest().authenticated()
     }
 
     @Bean
@@ -60,4 +66,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         source.registerCorsConfiguration("/**", configuration)
         return source
     }
+
+
 }
