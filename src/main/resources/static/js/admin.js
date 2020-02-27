@@ -18,7 +18,7 @@ function refreshData() {
 }
 
 function refreshTrains() {
-    $.getJSON("http://localhost:8080/api/systems",
+    $.getJSON("/api/systems",
         function (data) {
             window.trains = data
             var table = document.getElementById('table_trains').getElementsByTagName('tbody')[0];
@@ -50,7 +50,7 @@ function refreshTrains() {
 
 function loadDevices(id) {
 
-    $.getJSON("http://localhost:8080/api/devices?trainId=" + id,
+    $.getJSON("/api/devices?trainId=" + id,
         function (data) {
             window.currentDevices = data
             var table = document.getElementById('table_devices').getElementsByTagName('tbody')[0];
@@ -158,7 +158,7 @@ function setListeners() {
 
 function loadHeadDevicesToList() {
     if (selectedTrain != undefined) {
-        $.getJSON("http://localhost:8080/api/devices?trainId=" + selectedTrain.systemId + "&onlyHead=true",
+        $.getJSON("/api/devices?trainId=" + selectedTrain.systemId + "&onlyHead=true",
             function (data) {
                 window.headDevices = data
                 var table = document.getElementById('table_trains').getElementsByTagName('tbody')[0];
@@ -207,7 +207,7 @@ function addDevice() {
         }
         if (carNumber <= selectedTrain.carCount) {
             console.log(device)
-            sendJson(JSON.stringify(device), "http://localhost:8080/api/add/devices")
+            sendJson(JSON.stringify(device), "/api/add/devices")
             $('#modal_add_device').modal('hide');
         }
         else {
@@ -241,7 +241,7 @@ function extractTrain() {
     }
     console.log(train)
     if (typeof cars == 'number' && type != "" && number != "") {
-        sendJson(JSON.stringify(train), "http://localhost:8080/api/add/systems")
+        sendJson(JSON.stringify(train), "/api/add/systems")
         $('#modal_add_train').modal('hide');
     }
     else {
