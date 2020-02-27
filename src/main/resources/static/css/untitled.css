@@ -17,6 +17,6 @@
 
 .daterangepicker .drp-calendar {
     display: none;
-    /* max-width: 270px; */
+    max-width: auto;
 }
 
