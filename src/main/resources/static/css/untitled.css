@@ -5,7 +5,7 @@
 
 .table {
   table-layout: fixed;
-  /*border-collapse: collapse;*/
+  border-collapse: collapse;
   width: 100%;
 }
 
@@ -16,7 +16,8 @@
 }
 
 .daterangepicker .drp-calendar {
-    display: none;
-    max-width: auto;
+  display: none;
+  max-width: 100%;
+  width: auto;
 }
 
