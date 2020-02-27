@@ -18,7 +18,7 @@ function refreshData() {
 }
 
 function refreshTrains() {
-    $.getJSON("http://localhost:8080/api/systems",
+    $.getJSON("/api/systems",
         function (data) {
             window.trains = data
             var table = document.getElementById('table_trains').getElementsByTagName('tbody')[0];
@@ -50,7 +50,7 @@ function refreshTrains() {
 
 function loadDevices(id) {
 
-    $.getJSON("http://localhost:8080/api/devices?trainId=" + id,
+    $.getJSON("api/devices?trainId=" + id,
         function (data) {
             window.currentDevices = data
             var table = document.getElementById('table_devices').getElementsByTagName('tbody')[0];
