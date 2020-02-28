@@ -54,8 +54,8 @@ open class ApiController {
         println("Device added: $device")
         try {
             deviceRepository.save(device)
-        } catch (e: org.postgresql.util.PSQLException) {
-            reply = Reply("${e.message}", 1)
+        } catch (e: Exception) {
+            reply = Reply("Error", 1)
         }
         return reply
     }
@@ -66,8 +66,8 @@ open class ApiController {
         println("Measure added: $measure")
         try {
             measuresRepository.save(measure)
-        } catch (e: org.postgresql.util.PSQLException) {
-            reply = Reply("${e.message}", 1)
+        } catch (e: Exception) {
+            reply = Reply("Error", 1)
         }
         return reply
     }
@@ -78,8 +78,8 @@ open class ApiController {
         println("Train added: $system")
         try {
             systemRepository.save(system)
-        } catch (e: org.postgresql.util.PSQLException) {
-            reply = Reply("${e.message}", 1)
+        } catch (e: Exception) {
+            reply = Reply("Error", 1)
         }
         return reply
     }
