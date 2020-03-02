@@ -9,10 +9,28 @@
   width: 100%;
 }
 
+#table_devices {
+  overflow-y: auto;
+  min-height: 60vh;
+  max-height: 60vh;
+}
+
+#table_trains {
+  overflow-y: auto;
+  min-height: 60vh;
+  max-height: 60vh;
+}
+
+#table_measures_content {
+  overflow-y: auto;
+  min-height: 60vh;
+  max-height: 60vh;
+}
+
 .table {
   overflow-y: auto;
-  /*height: 100%;*/
-  /*max-height: 400px;*/
+  /*min-height: 60vh;*/
+  /*max-height: 60vh;*/
 }
 
 .daterangepicker .drp-calendar {

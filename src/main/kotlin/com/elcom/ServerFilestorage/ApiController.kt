@@ -65,6 +65,7 @@ open class ApiController {
     @PostMapping(path = arrayOf("/add/measures"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addOrUpdateMeasure(@RequestBody measure: Measure): Reply {
         var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+        println(measure)
         try {
             val day = measure.dateGSM.chunked(2).map { Integer.parseInt(it) }
             val time = measure.timeGSM.chunked(2).map { Integer.parseInt(it) }
