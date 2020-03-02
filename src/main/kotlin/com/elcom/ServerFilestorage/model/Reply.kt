@@ -3,6 +3,6 @@ package com.elcom.ServerFilestorage.model
 import javax.persistence.Entity
 
 data class Reply(
-        val message: String,
+        val timestamp: Long,
         val status: Int = 0
 )

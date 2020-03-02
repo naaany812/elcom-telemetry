@@ -24,9 +24,11 @@ data class Measure
         @Column(name = "coordinates")
         val coordinates: String,
         @Column(name = "date")
-        val date: Date,
+        var date: Date?,
         @Column(name = "time_day")
-        val time: Time,
+        var time: Time?,
+        val dateGSM: String,
+        val timeGSM: String,
         @Column(name = "rssi")
         val rssi: Int,
         @Column(name = "wattage")
