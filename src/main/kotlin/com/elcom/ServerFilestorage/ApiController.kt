@@ -69,7 +69,7 @@ open class ApiController {
         try {
             val day = measure.dateGSM.chunked(2).map { Integer.parseInt(it) }
             val time = measure.timeGSM.chunked(2).map { Integer.parseInt(it) }
-            measure.date = Date((100 + day[2]), day[1], day[0])
+            measure.date = Date((100 + day[2]), day[1]-1, day[0])
             measure.time = Time(time[2], time[1], time[0])
             measuresRepository.save(measure)
         } catch (e: Exception) {
