@@ -33,7 +33,11 @@ open class ApiController {
         } else
             return measuresRepository.findAll()
     }
-
+    @GetMapping("/time")
+    fun getTimestamp() : Reply
+    {
+        return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+    }
     @GetMapping("/devices")
     fun getDevices(@RequestParam(required = false) trainId: Int?, @RequestParam(required = false) onlyHead: Boolean?): List<Device> {
         if (trainId != null) {
