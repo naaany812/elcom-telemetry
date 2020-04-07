@@ -26,7 +26,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         http.authorizeRequests().and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/measures", true)
+                .defaultSuccessUrl("/admin", true)
                 .and()
                 .logout()
                 .permitAll()

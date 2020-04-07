@@ -16,21 +16,17 @@ data class Device
 
         @Column(name = "car_number")
         val carNumber: Int = 0,
-        @Column(name = "device_hw_id")
-        val deviceHwId: Int = 0,
+        @Column(name = "device_uid")
+        val deviceHwId: String = "",
 
         @Column(name = "type")
         @Enumerated(EnumType.ORDINAL)
         val type: CarType,
-        @Column(name = "device_hw_head_id")
-        val deviceHead: Int = 0,
-        @Column(name = "name")
-        val name: String = "",
-        @Column(name = "train_id")
+        @Column(name = "system_id")
         val trainId: Int,
-        @Column(name = "hw_ver")
+        @Column(name = "hw")
         val hwVer: Int = 0,
-        @Column(name = "sw_ver")
+        @Column(name = "sw")
         val swVer: Int = 0,
         @Column(name = "config_link")
         val configLink: String = ""

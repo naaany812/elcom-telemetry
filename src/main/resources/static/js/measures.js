@@ -68,7 +68,7 @@ $(document).ready(function () {
     }, function (start, end, label) {
         $("#table_measures_content tbody tr").remove();
         console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-        $.getJSON("/api/measures?startDate=" + start.format('YYYY-MM-DD') + "&endDate=" + end.format('YYYY-MM-DD') + "&systemId=" + window.systemId + "",
+        $.getJSON("http://localhost:8080/api/measures?startDate=" + start.format('YYYY-MM-DD') + "&endDate=" + end.format('YYYY-MM-DD') + "&systemId=" + window.systemId + "",
             function (data) {
                 var table = document.getElementById('table_measures_content').getElementsByTagName('tbody')[0];
                 var mapClimate = {}
@@ -111,13 +111,33 @@ $(document).ready(function () {
                     var cell3 = tr.insertCell()
                     var newText3 = document.createTextNode(v.coordinates)
                     cell3.appendChild(newText3)
-
+                    
+                    var text = []
+                    if(v.temp1!=null)
+                        text.push("1: "+v.temp1)
+                    if(v.temp2!=null)
+                        text.push("2: "+v.temp2)
+                    if(v.temp3!=null)
+                        text.push("3: "+v.temp3)
+                    if(v.temp4!=null)
+                        text.push("4: "+v.temp4)
+                    if(v.temp5!=null)
+                        text.push("5: "+v.temp5)
+                    
                     var cell4 = tr.insertCell()
-                    var newText4 = document.createTextNode(v.temperature)
+                    var newText4 = document.createTextNode(text.join("\n"))
                     cell4.appendChild(newText4)
-
+                    
                     var cell5 = tr.insertCell()
-                    var newText5 = document.createTextNode(v.wattage)
+                    var newText5 = document.createTextNode(v.voltage)
+                    cell5.appendChild(newText5)
+                    
+                    var cell5 = tr.insertCell()
+                    var newText5 = document.createTextNode(v.amperage)
+                    cell5.appendChild(newText5)
+                    
+                    var cell5 = tr.insertCell()
+                    var newText5 = document.createTextNode(v.speed)
                     cell5.appendChild(newText5)
                 });
 
@@ -282,7 +302,7 @@ function buildTableSystems() {
             }
         });
     }); */
-    $.getJSON("/api/systems",
+    $.getJSON("http://localhost:8080/api/systems",
         function (data) {
             window.trains = data
             var table = document.getElementById('table_modal').getElementsByTagName('tbody')[0];

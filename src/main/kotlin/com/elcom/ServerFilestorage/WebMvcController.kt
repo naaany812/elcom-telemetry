@@ -32,8 +32,7 @@ open class WebMvcController {
         model.addAttribute("files", storageService.loadAll().map { path: Path ->
             MvcUriComponentsBuilder.fromMethodName(WebMvcController::class.java,
                     "serveFile", path.fileName.toString()).build().toString()
-        }
-                .collect(Collectors.toList()))
+        }.collect(Collectors.toList()))
         var params = HashMap<String, Any?>()
         //  params.put("files",model.getAttribute("files"))
         //   var file form
