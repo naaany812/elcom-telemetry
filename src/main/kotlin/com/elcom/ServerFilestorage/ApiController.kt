@@ -67,6 +67,15 @@ open class ApiController {
             return energyRepository.findAll()
     }
 
+    //    @GetMapping("/radio")
+//    fun getRadio(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataRadio> {
+//        //  measuresRepository.
+//        if (startDate != null && endDate != null && deviceUid != null) {
+//            println("$startDate - $endDate")
+//            return energyRepository.getRange(Timestamp.valueOf("$startDate 00:00:00"), Timestamp.valueOf("$endDate 00:00:00"), deviceUid)
+//        } else
+//            return energyRepository.findAll()
+//    }
     @GetMapping("/time")
     fun getTimestamp(): Reply {
         return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
@@ -100,18 +109,17 @@ open class ApiController {
         return reply
     }
 
-    @PostMapping(path = arrayOf("/add/measuresnew"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    @PostMapping(path = arrayOf("/add/measures"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addOrUpdateMeasure(@RequestBody measure: MeasureHex): Reply {
         var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
         // println(measure)
         try {
             var result = HexParser.parseMeasure(measure)
             println(result)
-
-
             when (result) {
                 is DataClimate -> climateRepository.save(result)
                 is DataEnergy -> energyRepository.save(result)
+                is DataRadio -> {}
                 else -> reply = Reply(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value())
             }
         } catch (e: Exception) {
@@ -121,7 +129,7 @@ open class ApiController {
         return reply
     }
 
-    @PostMapping(path = arrayOf("/add/measures"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+    @PostMapping(path = arrayOf("/add/measuresold"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addOrUpdateMeasureOld(@RequestBody measure: Measure): Reply {
         var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
         println(measure)

@@ -27,5 +27,7 @@ data class DataRadio(
         @Column(name = "time")
         override var timestamp: Timestamp = Timestamp(0),
         val rssi: Int=0,
-        val rssiReverse: Int=0
+        val rssiReverse: Int=0,
+        val receivedCount: Long = 0,
+        val totalCount: Long = 0
 ) : HeaderMeasure()

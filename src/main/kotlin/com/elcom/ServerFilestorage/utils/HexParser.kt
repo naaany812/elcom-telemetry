@@ -77,7 +77,9 @@ class HexParser {
         private fun parseRadio(dataStringBytes: List<String>): DataRadio {
             return DataRadio(
                     rssi = dataStringBytes[6].toInt(16),
-                    rssiReverse = dataStringBytes[7].toInt(16))
+                    rssiReverse = dataStringBytes[7].toInt(16),
+            receivedCount = dataStringBytes.subList(8, 12).joinToString("").toLong(16),
+            totalCount = dataStringBytes.subList(12, 16).joinToString("").toLong(16))
         }
 
         private fun parseGeo(dataStringBytes: List<String>): DataGeo {
