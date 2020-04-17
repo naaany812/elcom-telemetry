@@ -114,13 +114,17 @@ open class ApiController {
         var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
         // println(measure)
         try {
-            var result = HexParser.parseMeasure(measure)
-            println(result)
-            when (result) {
-                is DataClimate -> climateRepository.save(result)
-                is DataEnergy -> energyRepository.save(result)
-                is DataRadio -> {}
-                else -> reply = Reply(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value())
+            println(measure)
+            for (data in measure.d) {
+                var result = HexParser.parseMeasure(measure.h,data)
+                println(result)
+                when (result) {
+                    is DataClimate -> climateRepository.save(result)
+                    is DataEnergy -> energyRepository.save(result)
+                    is DataRadio -> {
+                    }
+                    else -> reply = Reply(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value())
+                }
             }
         } catch (e: Exception) {
             reply = Reply(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value())
