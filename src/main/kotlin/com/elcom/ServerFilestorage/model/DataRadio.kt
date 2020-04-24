@@ -26,6 +26,8 @@ data class DataRadio(
         override var commandType: Int=0,
         @Column(name = "time")
         override var timestamp: Timestamp = Timestamp(0),
+        @Column(name = "time_received")
+        override var timestampReceived: Timestamp = Timestamp(0),
         val rssi: Int=0,
         val rssiReverse: Int=0,
         val receivedCount: Long = 0,

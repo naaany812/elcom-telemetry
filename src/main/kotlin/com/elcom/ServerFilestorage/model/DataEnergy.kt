@@ -25,6 +25,8 @@ data class DataEnergy(
         override var commandType: Int=0,
         @Column(name = "time")
         override var timestamp: Timestamp = Timestamp(0),
+        @Column(name = "time_received")
+        override var timestampReceived: Timestamp = Timestamp(0),
         @Column(name = "amperage")
         val amperage: Int = 0,
         @Column(name = "voltage")

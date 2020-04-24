@@ -12,22 +12,26 @@ data class Device
 (
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Int = -1,
+        var id: Int = -1,
 
         @Column(name = "car_number")
-        val carNumber: Int = 0,
+        var carNumber: Int = 0,
         @Column(name = "device_uid")
-        val deviceHwId: String = "",
+        var deviceHwId: String = "",
 
         @Column(name = "type")
         @Enumerated(EnumType.ORDINAL)
-        val type: CarType,
+        var type: CarType,
         @Column(name = "system_id")
-        val trainId: Int,
+        var trainId: Int,
         @Column(name = "hw")
-        val hwVer: Int = 0,
+        var hwVer: Int = 0,
         @Column(name = "sw")
-        val swVer: Int = 0,
+        var swVer: Int? = 0,
         @Column(name = "config_link")
-        val configLink: String = ""
+        var configLink: Int =0,
+        @Column(name = "sw_link")
+        var swId: Int? = 0,
+        @Column(name = "updates")
+        var update: Boolean = false
 )

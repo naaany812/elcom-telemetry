@@ -21,7 +21,9 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         http!!.cors().and().csrf().disable()
         http.authorizeRequests().antMatchers("/api/**").permitAll()
         http.authorizeRequests().antMatchers("/", "/js/**", "/bootstrap/**", "/css/**", "/fonts/**", "/img/**").permitAll()
-        http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
+     //   http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')")
+      //  http.authorizeRequests().antMatchers("/uploadFile","/downloadFile").access("hasRole('ROLE_ADMIN')")
+
 
         http.authorizeRequests().and()
                 .formLogin()
@@ -34,7 +36,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .logoutSuccessUrl("/login")
                 .deleteCookies("JSESSIONID")
 
-        http.authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests().anyRequest().permitAll()//.authenticated()
     }
 
     @Bean

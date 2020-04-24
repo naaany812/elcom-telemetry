@@ -1,62 +1,65 @@
 var trains = [];
 var currentDevices = [];
 var headDevices = [];
+var files = [];
 var selectedTrain
+var selectedFile
 var selectedDevice
 $(document).ready(function () {
     var yesterday = new Date()
     var tomorrow = new Date(yesterday)
     yesterday.setDate(yesterday.getDate() - 1)
     tomorrow.setDate(tomorrow.getDate() + 1)
-    var endt= dateFormat(tomorrow, 'm/d/Y')
+    var endt = dateFormat(tomorrow, 'm/d/Y')
     var startt = dateFormat(yesterday, 'm/d/Y')
-    console.log(startt+" "+endt)
+    console.log(startt + " " + endt)
 
-  /*   $(function () {
-        var start = moment().add(1, 'day').endOf('day');
-        var end = moment().add(1, 'day').endOf('day');
-        function cb(start, end) {
-            $('#reportrange span').html(start.format('MMM D') + ' - ' + end.format('MMM D'));
-        }
-        $('#reportrange').daterangepicker({
-            startDate: start,
-            endDate: end
-        }, cb);
-        cb(start, end);
-    });
-
-    $('input[name="reportRange"]').daterangepicker({
-        timePicker: true,
-        startDate: moment().startOf('hour'),
-        endDate: moment().startOf('hour').add(32, 'hour'),
-        locale: {
-          format: 'M/DD hh:mm A'
-        }
-      }); */
+    /*   $(function () {
+          var start = moment().add(1, 'day').endOf('day');
+          var end = moment().add(1, 'day').endOf('day');
+          function cb(start, end) {
+              $('#reportrange span').html(start.format('MMM D') + ' - ' + end.format('MMM D'));
+          }
+          $('#reportrange').daterangepicker({
+              startDate: start,
+              endDate: end
+          }, cb);
+          cb(start, end);
+      });
+  
+      $('input[name="reportRange"]').daterangepicker({
+          timePicker: true,
+          startDate: moment().startOf('hour'),
+          endDate: moment().startOf('hour').add(32, 'hour'),
+          locale: {
+            format: 'M/DD hh:mm A'
+          }
+        }); */
     $('#reportrange').daterangepicker({
         "linkedCalendars": false,
         "showCustomRangeLabel": false,
-        "startDate":startt,
-        "endDate":endt,
+        "startDate": startt,
+        "endDate": endt,
         locale: {
             format: 'MM/DD/YYYY'
-          }
+        }
     }, function (start, end, label) {
         $("#table_climate tbody tr").remove();
         $("#table_energy tbody tr").remove();
         console.log("applyed")
-        loadEnergy(start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'),selectedDevice.deviceHwId)
-        loadClimate(start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'),selectedDevice.deviceHwId)
+        loadEnergy(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
+        loadClimate(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
 
     });
-/*     $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-        alert ('hello');
-    }); */
+    /*     $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+            alert ('hello');
+        }); */
     $("#table_devices tbody tr").remove();
     $("#table_trains tbody tr").remove();
     bindSearchTable("#search_devices", "#counter_devices", "#table_devices")
     bindSearchTable("#search_trains", "#counter_trains", "#table_trains")
     refreshTrains();
+    loadSoftwareToElements();
     setListeners();
 });
 
@@ -206,25 +209,61 @@ function loadDevices(id) {
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(text)
                 cell2.appendChild(newText2)
-
+                
                 var cell2 = tr.insertCell()
-                var newText2 = document.createTextNode(v.deviceHwId)
-                cell2.appendChild(newText2)
+                var btn = document.createElement("BUTTON")
+                btn.innerHTML = "<a onClick='routeToMeasures(" + (tr.rowIndex - 1) + ");'>" +
+                    v.deviceHwId +
+                    "</a>"
+                cell2.appendChild(btn);
+
+                //  var newText2 = document.createTextNode(v.swVer)
+                console.log("Index: " + tr.rowIndex)
+                console.log("Index: " + tr)
+                var cell2 = tr.insertCell()
+                var btn = document.createElement("BUTTON")
+                btn.innerHTML = "<a onClick='editSoftware(" + (tr.rowIndex - 1) + ");'>" +
+                    v.swVer +
+                    "</button>"
+                cell2.appendChild(btn);
 
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(v.hwVer)
                 cell2.appendChild(newText2)
 
+                var text="Нет"
+                if(v.update)
+                text="Да"
                 var cell2 = tr.insertCell()
-                var newText2 = document.createTextNode(v.swVer)
+                var newText2 = document.createTextNode(text)
                 cell2.appendChild(newText2)
+
             });
 
             window.headDevices = headDev;
         }
     );
 }
+function createElementFromHTML(htmlString) {
+    var div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
 
+    // Change this to div.childNodes to support multiple top-level nodes
+    return div.firstChild;
+}
+function editSoftware(index) {
+    selectedFile = files[index]
+    selectedDevice=currentDevices[index]
+    if (selectedFile != undefined) {
+        $("#modal_update_software").modal('show');
+    }
+    else {
+        alert("Для обновления загрузите прошивки!");
+    }
+    //  var index = $(this).index();
+    //  routeToMeasures(index);
+    console.log("yahooo")
+}
 function sendJson(json, url) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -233,8 +272,38 @@ function sendJson(json, url) {
 };
 
 function setListeners() {
-   
-    
+
+    $('#upload_form').submit(function (event) {
+        var formElement = this;
+        // You can directly create form data from the form element
+        // (Or you could get the files from input element and append them to FormData as we did in vanilla javascript)
+        var formData = new FormData(formElement);
+        
+        var swVer = parseInt(document.getElementById("version_input").value, 10);
+        formData.append('version', swVer)
+        // formData.append(formElement)
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/api/uploadFile",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                loadSoftwareToElements();
+                // process response
+            },
+            error: function (error) {
+                console.log(error);
+                // process error
+            }
+        });
+
+        event.preventDefault();
+    });
+
     $("#table_trains").on('click', 'tr', function (e) {
         var index = $(this).index()
         window.systemId = trains[index].systemId
@@ -244,30 +313,20 @@ function setListeners() {
         loadDevices(selectedTrain.systemId)
     });
 
-    $("#table_devices").on('click', 'tr', function (e) {
-        $("#table_climate tbody tr").remove();
-        $("#table_energy tbody tr").remove();
-        var index = $(this).index()
-        selectedDevice = currentDevices[index]
-        $('.nav-tabs a[href="#tab-2"]').tab('show')
-        console.log(currentDevices[index])
-        $('#device_nameholder').html(selectedDevice.deviceHwId)
-        var yesterday = new Date()
-        var tomorrow = new Date(yesterday)
-        yesterday.setDate(yesterday.getDate() - 1)
-        tomorrow.setDate(tomorrow.getDate() + 1)
-        var end = dateFormat(tomorrow, 'Y-m-d')
-        var start = dateFormat(yesterday, 'Y-m-d')
-        
-        $('#reportrange').data('daterangepicker').setStartDate(dateFormat(yesterday, 'm/d/Y'));
-        $('#reportrange').data('daterangepicker').setEndDate(dateFormat(tomorrow, 'm/d/Y'));
-        loadClimate(start, end, selectedDevice.deviceHwId)
-        loadEnergy(start, end, selectedDevice.deviceHwId)
-    });
+    // $("#table_devices").on('click', 'tr', function (e) {
+    //     var index = $(this).index();
+    //     routeToMeasures(index);
+    // });
     $("#button_save_train").on('click', function (e) {
         extractTrain()
         refreshTrains()
     });
+
+    $("#button_update_file").on('click', function (e) {
+        updateFile()
+        loadDevices(selectedTrain.systemId);
+    });
+
     $("#button_add_device").on('click', function (e) {
         if (selectedTrain != undefined) {
             $("#modal_add_device").modal('show');
@@ -287,6 +346,36 @@ function setListeners() {
     $("#modal_add_device").on('show.bs.modal', function () {
         loadHeadDevicesToList();
     });
+}
+function updateFile() {
+    var select = document.getElementById("software_modal_list")
+    var fileID = parseInt(select.value, 10)
+    console.log(fileID)
+    var uid = selectedDevice.deviceHwId
+    $.getJSON("/api/setFile?uid=" + uid + "&fileId=" + fileID,
+        function (data) {
+            console.log(data);
+            $("#modal_add_device").modal('hide');
+        });
+}
+function routeToMeasures(index) {
+    $("#table_climate tbody tr").remove();
+    $("#table_energy tbody tr").remove();
+    selectedDevice = currentDevices[index]
+    $('.nav-tabs a[href="#tab-2"]').tab('show')
+    console.log(currentDevices[index])
+    $('#device_nameholder').html(selectedDevice.deviceHwId)
+    var yesterday = new Date()
+    var tomorrow = new Date(yesterday)
+    yesterday.setDate(yesterday.getDate() - 1)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    var end = dateFormat(tomorrow, 'Y-m-d')
+    var start = dateFormat(yesterday, 'Y-m-d')
+
+    $('#reportrange').data('daterangepicker').setStartDate(dateFormat(yesterday, 'm/d/Y'));
+    $('#reportrange').data('daterangepicker').setEndDate(dateFormat(tomorrow, 'm/d/Y'));
+    loadClimate(start, end, selectedDevice.deviceHwId)
+    loadEnergy(start, end, selectedDevice.deviceHwId)
 }
 
 function loadHeadDevicesToList() {
@@ -314,6 +403,47 @@ function loadHeadDevicesToList() {
     else {
         alert("Для добавления устройства выберите электропоезд!")
     }
+}
+
+function loadSoftwareToElements() {
+    $.getJSON("/api/files",
+        function (data) {
+            window.files = data
+            var table = document.getElementById('table_software').getElementsByTagName('tbody')[0];
+            $("#software_modal_list option").remove();
+            $("#table_software tbody tr").remove();
+            // console.log(data.responseData.resultText)
+            var select = document.getElementById("software_modal_list")
+            $.each(data, function (k, v) {
+                //     console.log(k, v);
+                // var keys = ["trainType", "trainNumber"];
+                //  files.add()
+                var tr = "" + v.name + " " + "v." + v.version
+                var option = document.createElement("option")
+                option.label = tr
+                option.value = "" + v.id
+                select.add(option)
+
+                var tr = table.insertRow()
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(v.name)
+                cell.appendChild(newText)
+
+                var cell = tr.insertCell()
+                var newText = document.createTextNode("v."+v.version)
+                cell.appendChild(newText)
+
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(v.size+"B")
+                cell.appendChild(newText)
+            });
+        }
+
+    );
+}
+
+function updateSoftware() {
+
 }
 
 function addDevice() {
@@ -434,3 +564,4 @@ function bindSearchTable(searchId, counterId, tableId) {
         else { $('.no-result').hide(); }
     });
 };
+

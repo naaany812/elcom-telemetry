@@ -71,7 +71,21 @@ open class FileSystemStorageService constructor( @Autowired properties: StorageP
             throw StorageFileNotFoundException("Could not read file: $filename", e)
         }
     }
-
+    fun loadBlockAsResource(filename: String,from:Long,to:Long) : Resource
+    {
+        return try {
+            val file = load(filename)
+            val resource: Resource = UrlResource(file.toUri())
+            if (resource.exists() || resource.isReadable) {
+                resource
+            } else {
+                throw StorageFileNotFoundException(
+                        "Could not read file: $filename")
+            }
+        } catch (e: MalformedURLException) {
+            throw StorageFileNotFoundException("Could not read file: $filename", e)
+        }
+    }
     override fun deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile())
     }

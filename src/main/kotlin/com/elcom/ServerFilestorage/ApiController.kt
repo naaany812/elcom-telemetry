@@ -2,15 +2,28 @@ package com.elcom.ServerFilestorage
 
 import com.elcom.ServerFilestorage.model.*
 import com.elcom.ServerFilestorage.repository.*
+import com.elcom.ServerFilestorage.utils.CRC
 import com.elcom.ServerFilestorage.utils.HexParser
+import com.example.uploadingfiles.storage.FileSystemStorageService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.core.io.Resource
+import org.springframework.data.repository.cdi.CdiRepositoryContext
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.io.IOException
 import java.lang.System
+import java.nio.file.Files
 import java.sql.Date
 import java.sql.Time
 import java.sql.Timestamp
+import javax.servlet.http.HttpServletRequest
+import kotlin.experimental.and
+import kotlin.experimental.xor
 
 
 @RestController
@@ -26,6 +39,10 @@ open class ApiController {
     lateinit var energyRepository: DataEnergyRepository
     @Autowired
     lateinit var climateRepository: DataClimateRepository
+    @Autowired
+    lateinit var storageService: FileSystemStorageService
+    @Autowired
+    lateinit var filesService: FileDataRepository
 
     @GetMapping("/measures")
     fun getMeasures(@RequestParam(required = false) startDate: Date?, @RequestParam(required = false) endDate: Date?, @RequestParam(required = false) systemId: Int?): List<Measure> {
@@ -35,6 +52,11 @@ open class ApiController {
             return measuresRepository.getRangeForSystem(startDate, endDate, systemId)
         } else
             return measuresRepository.findAll()
+    }
+
+    @GetMapping("/files")
+    fun getFilesList(): List<FileData> {
+        return filesService.findAll()
     }
 
     @GetMapping("/measuresnew")
@@ -116,18 +138,19 @@ open class ApiController {
         try {
             println(measure)
             for (data in measure.d) {
-                var result = HexParser.parseMeasure(measure.h,data)
+                var result = HexParser.parseMeasure(measure.h, data)
+                var dev = deviceRepository.getFirstDeviceByUid(result.UID)
                 println(result)
                 when (result) {
                     is DataClimate -> climateRepository.save(result)
                     is DataEnergy -> energyRepository.save(result)
                     is DataRadio -> {
                     }
-                    else -> reply = Reply(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value())
+                    else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
                 }
             }
         } catch (e: Exception) {
-            reply = Reply(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value())
+            reply = Reply(0, HttpStatus.BAD_REQUEST.value())
             e.printStackTrace()
         }
         return reply
@@ -160,4 +183,137 @@ open class ApiController {
         }
         return reply
     }
+
+    @GetMapping("/downloadFile/{filename:.+}")
+    @ResponseBody
+    fun downloadFile(@PathVariable filename: String?, request: HttpServletRequest): ResponseEntity<Resource?>? {
+        val file: Resource = storageService.loadAsResource(filename!!)
+
+        var contentType: String? = null
+        try {
+            contentType = request.servletContext.getMimeType(file.file.absolutePath)
+        } catch (ex: IOException) {
+            println("Could not determine file type.")
+        }
+
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"")
+                .body(file);
+        //  return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename.toString() + "\"").body<Resource?>(file)
+    }
+
+    @GetMapping("/getBlock", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
+    @ResponseBody
+    fun getFileBlock2(@RequestParam("uid") uid: String, @RequestParam("from") from: Long, @RequestParam("to") to: Long): ByteArray {
+
+        var dev = deviceRepository.getFirstDeviceByUid(uid)
+
+        var fileData = filesService.getOne(dev.swId!!)
+
+        val file: Resource = storageService.loadAsResource(fileData.name)
+        val fileEncoded = Files.readAllBytes(file.file.toPath())
+        val block = fileEncoded.copyOfRange(from.toInt(), to.toInt())
+
+        // val resultFileBlock =
+        var contentType: String = "application/octet-stream"
+
+        return block
+    }
+
+    @PostMapping("/getFile", produces = arrayOf("application/json"))
+    @ResponseBody
+    fun getFileBlock(@RequestBody measure: MeasureHex): ReplyFile {
+
+        //  print(measure)
+        var request = HexParser.parseMeasure(measure.h, measure.d[0])
+        //print(request)
+        var reply: ReplyFile
+        when (request) {
+            is DataFileRequest -> {
+                var dev = deviceRepository.getFirstDeviceByUid(request.UID)
+                var fileData = filesService.getOne(dev.swId!!)
+
+                val file: Resource = storageService.loadAsResource(fileData.name)
+                val fileEncoded = Files.readAllBytes(file.file.toPath())
+                val block = fileEncoded.copyOfRange(request.from, request.to)
+                println("${request.from} - ${request.to}")
+                reply = ReplyFile(0, String(block), HttpStatus.OK.value())
+            }
+            else -> {
+                println(request)
+                reply = ReplyFile(0, "$request", HttpStatus.NOT_ACCEPTABLE.value())
+            }
+        }
+
+        return reply
+    }
+
+    fun splitFile() {}
+
+    @GetMapping("/filesize")
+    fun getFileSizeInBytes(@RequestParam("uid") uid: String): Long {
+        var dev = deviceRepository.getFirstDeviceByUid(uid)
+
+        if (dev.swId == null)
+            return 0
+
+        var fileData = filesService.getOne(dev.swId!!)
+        // var file = storageService.loadAs(filename=fileData.name)
+        //  file.
+        return fileData.size
+    }
+
+//    @GetMapping("/getfirst")
+//    @ResponseBody
+//    fun getfirstDevice(@RequestParam("uid") uid: String) : Device
+//    {
+//            return deviceRepository.getFirstDeviceByUid(uid)
+//    }
+
+
+    @GetMapping("/setFile")
+    @ResponseBody
+    fun setFile(@RequestParam("uid") uid: String, @RequestParam("fileId") id: Int): Reply {
+
+        println("$uid : $id")
+        var dev = deviceRepository.getFirstDeviceByUid(uid)
+        dev.swId = id
+        var file = filesService.getOne(id)
+        dev.swVer = file.version
+        dev.update = true
+        deviceRepository.save(dev)
+
+        return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+    }
+
+    @GetMapping("/endUpdate")
+    fun endUpdate(@RequestParam("uid") uid: String): Reply {
+        var dev = deviceRepository.getFirstDeviceByUid(uid)
+        dev.update = false
+        deviceRepository.save(dev)
+        return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+    }
+
+    /*TODO */
+    fun updateSwVersion() {}
+
+    @PostMapping("/uploadFile")
+    @ResponseBody
+    fun uploadFile(@RequestParam("file") file: MultipartFile, @RequestParam("version") version: Int): Reply {
+        storageService.store(file)
+        val fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(file.name)
+                .toUriString()
+        val fileData: FileData = FileData(name = file.originalFilename!!, version = version, size = file.size)
+        filesService.save(fileData)
+//        redirectAttributes.addFlashAttribute("message",
+//                "You successfully uploaded " + file.originalFilename + "!")
+        return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+    }
+
 }

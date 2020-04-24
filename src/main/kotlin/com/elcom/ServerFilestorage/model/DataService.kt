@@ -26,6 +26,8 @@ data class DataService(
         override var commandType: Int=0,
         @Column(name = "time")
         override var timestamp: Timestamp = Timestamp(0),
+        @Column(name = "time_received")
+        override var timestampReceived: Timestamp = Timestamp(0),
         val swVer:Int=0,
         val hwVer:Int=0,
         val phone:Int=0,

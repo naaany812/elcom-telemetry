@@ -1,6 +1,7 @@
 package com.elcom.ServerFilestorage.utils
 
 import com.elcom.ServerFilestorage.model.*
+import java.lang.System
 import java.sql.Timestamp
 
 class HexParser {
@@ -13,6 +14,7 @@ class HexParser {
         val DATA_ENERGY = "50"
         val DATA_SERVICE = "21"
         val DATA_RADIO = "22"
+        val DATA_FILE = "23"
         val DATA_GEO = "60"
 
 
@@ -21,12 +23,15 @@ class HexParser {
           //  println("parsing measure")
             val headerStringBytes = header.chunked(2)
             val dataStringBytes = data.chunked(2)
+
+            println(dataStringBytes.size)
             val result = when (dataStringBytes[3]) {
                 DATA_CLIMATE -> parseClimate(dataStringBytes)
                 DATA_ENERGY -> parseEnergy(dataStringBytes)
                 DATA_SERVICE -> parseService(dataStringBytes)
                 DATA_RADIO -> parseRadio(dataStringBytes)
                 DATA_GEO -> parseGeo(dataStringBytes)
+                DATA_FILE ->parseFile(dataStringBytes)
                 else -> HeaderMeasure()
             }
             return parseHeader(result, headerStringBytes, dataStringBytes)
@@ -42,6 +47,7 @@ class HexParser {
             header.deviceId = dataStringBytes[2].toInt(16)
             header.commandType = dataStringBytes[3].toInt(16)
             header.timestamp = Timestamp(dataStringBytes.subList(4, 8).joinToString("").toLong(16)*1000)
+            header.timestampReceived = Timestamp(System.currentTimeMillis())
           //  println(header)
             return header
         }
@@ -92,6 +98,13 @@ class HexParser {
                     flag = dataStringBytes[24].toInt(16),
                     satCount = dataStringBytes[25].toInt(16)
 
+            )
+        }
+        private fun parseFile(dataStringBytes: List<String>): DataFileRequest {
+            print("file parsed")
+            return DataFileRequest(
+                    from = dataStringBytes.subList(8, 12).joinToString("").toInt(16),
+                    to = dataStringBytes.subList(12, 16).joinToString("").toInt(16)
             )
         }
     }

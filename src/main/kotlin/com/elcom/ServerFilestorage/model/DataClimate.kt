@@ -25,6 +25,8 @@ data class DataClimate(
         override var commandType: Int=0,
         @Column(name = "time")
         override var timestamp: Timestamp = Timestamp(0),
+        @Column(name = "time_received")
+        override var timestampReceived: Timestamp = Timestamp(0),
         @Column(name = "channel_1")
         val channel1:Int=0,
         @Column(name = "channel_2")

@@ -23,17 +23,17 @@ import java.util.stream.Collectors
 @Controller
 @EnableWebMvc
 open class WebMvcController {
-    @Autowired
-    lateinit var storageService: FileSystemStorageService
+//    @Autowired
+//    lateinit var storageService: FileSystemStorageService
 
     @RequestMapping("/")
     @Throws(IOException::class)
     open fun getHome(model: Model): String {
-        model.addAttribute("files", storageService.loadAll().map { path: Path ->
-            MvcUriComponentsBuilder.fromMethodName(WebMvcController::class.java,
-                    "serveFile", path.fileName.toString()).build().toString()
-        }.collect(Collectors.toList()))
-        var params = HashMap<String, Any?>()
+//        model.addAttribute("files", storageService.loadAll().map { path: Path ->
+//            MvcUriComponentsBuilder.fromMethodName(WebMvcController::class.java,
+//                    "serveFile", path.fileName.toString()).build().toString()
+//        }.collect(Collectors.toList()))
+       // var params = HashMap<String, Any?>()
         //  params.put("files",model.getAttribute("files"))
         //   var file form
         return "redirect:/login"
@@ -61,32 +61,32 @@ open class WebMvcController {
     @RequestMapping("/measures")
     @Throws(IOException::class)
     open fun getMeasures(model: Model): String {
-        model.addAttribute("files", storageService.loadAll().map { path: Path ->
-            MvcUriComponentsBuilder.fromMethodName(WebMvcController::class.java,
-                    "serveFile", path.fileName.toString()).build().toString()
-        }
-                .collect(Collectors.toList()))
-        var params = HashMap<String, Any?>()
+//        model.addAttribute("files", storageService.loadAll().map { path: Path ->
+//            MvcUriComponentsBuilder.fromMethodName(WebMvcController::class.java,
+//                    "serveFile", path.fileName.toString()).build().toString()
+//        }
+//                .collect(Collectors.toList()))
+//        var params = HashMap<String, Any?>()
         //  params.put("files",model.getAttribute("files"))
         //   var file form
         return "measures"
     }
 
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    fun serveFile(@PathVariable filename: String?): ResponseEntity<Resource?>? {
-        val file: Resource = storageService.loadAsResource(filename!!)
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename.toString() + "\"").body<Resource?>(file)
-    }
-
-    @PostMapping("/")
-    fun handleFileUpload(@RequestParam("file") file: MultipartFile,
-                         redirectAttributes: RedirectAttributes): String? {
-        storageService.store(file)
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.originalFilename + "!")
-        return "redirect:/"
-    }
+//    @GetMapping("/files/{filename:.+}")
+//    @ResponseBody
+//    fun serveFile(@PathVariable filename: String?): ResponseEntity<Resource?>? {
+//        val file: Resource = storageService.loadAsResource(filename!!)
+//        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename.toString() + "\"").body<Resource?>(file)
+//    }
+//
+//    @PostMapping("/")
+//    fun handleFileUpload(@RequestParam("file") file: MultipartFile,
+//                         redirectAttributes: RedirectAttributes): String? {
+//        storageService.store(file)
+//        redirectAttributes.addFlashAttribute("message",
+//                "You successfully uploaded " + file.originalFilename + "!")
+//        return "redirect:/"
+//    }
 
     @ExceptionHandler(StorageFileNotFoundException::class)
     fun handleStorageFileNotFound(exc: StorageFileNotFoundException?): ResponseEntity<*>? {
