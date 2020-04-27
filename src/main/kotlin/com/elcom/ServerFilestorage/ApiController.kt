@@ -89,7 +89,7 @@ open class ApiController {
             return energyRepository.findAll()
     }
 
-    //    @GetMapping("/radio")
+//    @GetMapping("/radio")
 //    fun getRadio(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataRadio> {
 //        //  measuresRepository.
 //        if (startDate != null && endDate != null && deviceUid != null) {
@@ -121,31 +121,31 @@ open class ApiController {
 
     @PostMapping(path = arrayOf("/add/devices"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addOrUpdateDevice(@RequestBody device: Device): Reply {
-        var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+        var reply = Reply(0, HttpStatus.OK.value())
         println("Device added: $device")
         try {
             deviceRepository.save(device)
         } catch (e: Exception) {
-            reply = Reply(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value())
+            reply = Reply(0, HttpStatus.BAD_REQUEST.value())
         }
         return reply
     }
 
     @PostMapping(path = arrayOf("/add/measures"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addOrUpdateMeasure(@RequestBody measure: MeasureHex): Reply {
-        var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
         // println(measure)
+        var reply = Reply(0, HttpStatus.BAD_REQUEST.value())
         try {
             println(measure)
             for (data in measure.d) {
                 var result = HexParser.parseMeasure(measure.h, data)
                 var dev = deviceRepository.getFirstDeviceByUid(result.UID)
+                reply = Reply(dev.swVer!!.toLong(), HttpStatus.OK.value())
                 println(result)
                 when (result) {
                     is DataClimate -> climateRepository.save(result)
                     is DataEnergy -> energyRepository.save(result)
-                    is DataRadio -> {
-                    }
+                    is DataRadio -> { }
                     else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
                 }
             }
