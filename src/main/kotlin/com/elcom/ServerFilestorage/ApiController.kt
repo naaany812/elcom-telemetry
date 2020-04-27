@@ -99,8 +99,8 @@ open class ApiController {
 //            return energyRepository.findAll()
 //    }
     @GetMapping("/time")
-    fun getTimestamp(): Reply {
-        return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
+    fun getTimestamp(): ReplyTime {
+        return ReplyTime(System.currentTimeMillis(), HttpStatus.OK.value())
     }
 
     @GetMapping("/devices")
