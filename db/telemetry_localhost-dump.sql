@@ -436,8 +436,6 @@ ALTER TABLE ONLY public.systems ALTER COLUMN id SET DEFAULT nextval('public.syst
 --
 
 COPY public.data_climate (id, order_num, uid, id_train, car_number, receiver_code, device_type, command_type, "time", channel_1, channel_2, channel_3, channel_4, time_received) FROM stdin;
-52	8	004300580400430051040043	8800	0	1	16	64	2020-04-07 11:47:24	27	127	127	127	\N
-53	8	004300580400430051040043	8800	0	1	16	64	2020-04-07 11:50:01	27	127	127	127	\N
 \.
 
 
@@ -448,24 +446,6 @@ COPY public.data_climate (id, order_num, uid, id_train, car_number, receiver_cod
 --
 
 COPY public.data_energy (id, order_num, uid, id_train, car_number, receiver_code, device_type, command_type, "time", amperage, voltage, energy_active, energy_passive, time_received) FROM stdin;
-51	96	004300580400430051040043	8800	0	1	16	80	2020-05-06 11:02:35	908	17	1454040	13721	\N
-54	96	004300580400430051040043	8800	0	1	16	80	2020-04-07 11:50:01	908	17	1454040	13721	\N
-55	1	004300580400430051040043	8800	0	1	16	80	2020-04-16 16:26:55	897	17	1454046	13721	\N
-56	1	004300580400430051040043	8800	0	1	16	80	2020-04-16 16:26:55	897	17	1454046	13721	\N
-57	1	004300580400430051040043	8800	0	1	16	80	2020-04-16 16:26:55	897	17	1454046	13721	\N
-58	1	004300580400430051040043	8800	0	1	16	80	2020-04-16 16:26:55	897	17	1454046	13721	\N
-59	1	004300580400430051040043	8800	0	1	16	80	2020-04-16 16:26:55	897	17	1454046	13721	\N
-60	1	004300580400430051040043	8800	0	1	16	80	2020-04-16 16:26:55	897	17	1454046	13721	\N
-61	10000	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:44	901	17	1454040	13721	\N
-62	10256	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:45	901	17	1454040	13721	\N
-63	10000	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:44	901	17	1454040	13721	\N
-64	10256	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:45	901	17	1454040	13721	\N
-65	10000	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:44	901	17	1454040	13721	\N
-66	10256	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:45	901	17	1454040	13721	\N
-67	10000	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:44	901	17	1454040	13721	\N
-68	10256	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:45	901	17	1454040	13721	\N
-69	0	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:44	901	17	1454040	13721	\N
-70	6	004300580400430051040043	8800	0	1	16	80	2020-04-17 13:42:45	901	17	1454040	13721	\N
 \.
 
 
@@ -476,7 +456,6 @@ COPY public.data_energy (id, order_num, uid, id_train, car_number, receiver_code
 --
 
 COPY public.devices (id, device_uid, system_id, hw, sw, config_link, type, car_number, name, sw_link, updates) FROM stdin;
-1	004300580400430051040043	8800	1	2	0	0	1	\N	76	t
 \.
 
 
@@ -487,21 +466,6 @@ COPY public.devices (id, device_uid, system_id, hw, sw, config_link, type, car_n
 --
 
 COPY public.devicesold (id, device_hw_id, device_hw_head_id, hw_ver, sw_ver, config_link, train_id, type, car_number, device_head_id, name) FROM stdin;
-4	228	2281337	1	1	elsewhere	8800	0	4	\N	БКТ
-5	322	2281337	1	1	nowhere	8800	0	3	\N	БИУ
-3	1337	2281337	1	1	there	8800	0	2	\N	БКТЭ
-1	2281337	2281337	1	1	here	8800	0	1	\N	МУО
-6	1488	1488	1	1	hellothere	8801	0	1	\N	ДТ
-24	441467	2281337	0	0		8800	1	15	\N	МУО
-25	414144	414144	0	0		8800	0	19	\N	БИУ
-26	414131	414131	0	0		357913949	0	4	\N	БКТЭ
-29	41414	41414	0	0		357913949	0	4	\N	БКТЭ
-30	41555	41555	0	0		357913949	1	5	\N	БКТ
-32	41554	41555	0	0		357913949	0	6	\N	МУО
-33	414147	2281337	0	0		8800	1	4	\N	БКТЭ
-34	4113	2281337	0	0		8800	0	4	\N	БИУ
-35	1674434	414144	0	0		8800	2	4	\N	БКТ
-36	4144690	414144	0	0		8800	1	5	\N	БКТЭ
 \.
 
 
@@ -512,7 +476,6 @@ COPY public.devicesold (id, device_hw_id, device_hw_head_id, hw_ver, sw_ver, con
 --
 
 COPY public.measures (id, system_id, coordinates, date, rssi, status, hw_ver, sw_ver, device_hw_id, time_day, temp1, temp2, temp3, temp4, temp5, speed, amperage, voltage, dategsm, timegsm) FROM stdin;
-16	8800	123123	2020-03-20	1	1	1	1	1337	14:13:44	\N	2	3	4	5	120.4	880	220	200320	141344
 \.
 
 
@@ -533,11 +496,6 @@ COPY public.software (id, filename, version, path, actual, link, size) FROM stdi
 --
 
 COPY public.systems (id, train_type, train_number, system_id, status, car_count, head_device_id) FROM stdin;
-0	ЭД4М	6007	8800	1	8	\N
-1	ЭД4М	6810	8801	1	4	\N
-14	ЭД4М	1488	351120146	0	12	\N
-18	ЭД4М	6273	351267143	0	10	\N
-21	414	1414	357913949	0	3	\N
 \.
 
 

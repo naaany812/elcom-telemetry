@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.io.File
 import java.io.IOException
 import java.lang.System
 import java.nio.file.Files
@@ -24,6 +25,7 @@ import java.sql.Timestamp
 import javax.servlet.http.HttpServletRequest
 import kotlin.experimental.and
 import kotlin.experimental.xor
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 @RestController
@@ -206,7 +208,7 @@ open class ApiController {
         //  return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename.toString() + "\"").body<Resource?>(file)
     }
 
-    @GetMapping("/getBlock", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])
+    @GetMapping("/getBlock", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE])
     @ResponseBody
     fun getFileBlock2(@RequestParam("uid") uid: String, @RequestParam("from") from: Long, @RequestParam("to") to: Long): ByteArray {
 
@@ -222,6 +224,39 @@ open class ApiController {
         var contentType: String = "application/octet-stream"
 
         return block
+    }
+    @PostMapping("/getFile2", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+    @ResponseBody
+    fun getFileBlock3(@RequestBody measure: MeasureHex): ResponseEntity<Any> {
+
+        var request = HexParser.parseMeasure(measure.h, measure.d[0])
+        //print(request)
+        var reply: ResponseEntity<Any>
+        when (request) {
+            is DataFileRequest -> {
+                var dev = deviceRepository.getFirstDeviceByUid(request.UID)
+                var fileData = filesService.getOne(dev.swId!!)
+
+                val file: Resource = storageService.loadAsResource(fileData.name)
+                val fileEncoded = Files.readAllBytes(file.file.toPath())
+                val block = fileEncoded.copyOfRange(request.from, request.to)
+          //      var header = HttpHeaders()
+//                header.add("status",)
+//                val map = HashMap<String, Any>()
+//                map.put("file",block)
+//                map.put("status",HttpStatus.OK.value())
+//                println("${request.from} - ${request.to}")
+                reply = ResponseEntity(block,HttpStatus.NOT_ACCEPTABLE)
+            }
+            else -> {
+                println(request)
+                reply = ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
+            }
+        }
+        // val resultFileBlock =
+        var contentType: String = "application/octet-stream"
+
+        return reply
     }
 
     @PostMapping("/getFile", produces = arrayOf("application/json"))
