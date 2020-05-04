@@ -320,6 +320,7 @@ function setListeners() {
     $("#button_save_train").on('click', function (e) {
         extractTrain()
         refreshTrains()
+        location.reload()
     });
 
     $("#button_update_file").on('click', function (e) {
@@ -339,6 +340,7 @@ function setListeners() {
     $("#button_save_device").on('click', function (e) {
         addDevice();
         loadDevices(selectedTrain.systemId);
+        location.reload();
     });
     $("#checkbox_head").on('click', function (e) {
         check();
