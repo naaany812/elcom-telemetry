@@ -75,7 +75,7 @@ $ java -jar /build/libs/filename.jar
 }
 ```
 
-#### `GET /api/add/time`
+#### `GET /api/time`
 **Ответ:** Время сервера в формате 
 ```json 
 {
