@@ -306,11 +306,7 @@ function setListeners() {
 
     $("#table_trains").on('click', 'tr', function (e) {
         var index = $(this).index()
-        window.systemId = trains[index].systemId
-        window.selectedTrain = trains[index]
-        console.log(selectedTrain)
-        $('#train_nameholder').html(selectedTrain.trainType + " " + selectedTrain.trainNumber)
-        loadDevices(selectedTrain.systemId)
+        setSelectedTrain(index)
     });
 
     // $("#table_devices").on('click', 'tr', function (e) {
@@ -340,7 +336,10 @@ function setListeners() {
     $("#button_save_device").on('click', function (e) {
         addDevice();
         loadDevices(selectedTrain.systemId);
-        location.reload();
+        console.log("Set the train as selected to see the new device: ", selectedTrain.trainType)
+        var trainRow = $("tr:contains('"+ selectedTrain.systemId + "')").get()
+        var index = $(trainRow).index()
+        setSelectedTrain(index)
     });
     $("#checkbox_head").on('click', function (e) {
         check();
@@ -348,6 +347,14 @@ function setListeners() {
     $("#modal_add_device").on('show.bs.modal', function () {
         loadHeadDevicesToList();
     });
+}
+
+function setSelectedTrain(index){
+    window.systemId = trains[index].systemId
+    window.selectedTrain = trains[index]
+    console.log(selectedTrain)
+    $('#train_nameholder').html(selectedTrain.trainType + " " + selectedTrain.trainNumber)
+    loadDevices(selectedTrain.systemId)
 }
 function updateFile() {
     var select = document.getElementById("software_modal_list")
