@@ -161,7 +161,7 @@ open class ApiController {
                         }
                         else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
                     }
-                }гы
+                }
                 else
                 {
                     reply = Reply(0, HttpStatus.FORBIDDEN.value())
