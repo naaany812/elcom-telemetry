@@ -14,6 +14,6 @@ interface DeviceRepository : JpaRepository<Device, Int> {
     @Query(value = "select * from devices  where train_id = :trainId and device_hw_id = device_hw_head_id order by car_number", nativeQuery = true)
     fun getHeadDevicesFromTrain(@Param("trainId") trainId: Int?) : List<Device>
     @Query(value = "select * from devices  where device_uid = :uid", nativeQuery = true)
-    fun getFirstDeviceByUid(@Param("uid") uid: String?) : Device
+    fun getFirstDeviceByUid(@Param("uid") uid: String?) : Device?
 
 }

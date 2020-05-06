@@ -24,7 +24,7 @@ class HexParser {
             val headerStringBytes = header.chunked(2)
             val dataStringBytes = data.chunked(2)
 
-            println(dataStringBytes.size)
+        //    println(dataStringBytes[3])
             val result = when (dataStringBytes[3]) {
                 DATA_CLIMATE -> parseClimate(dataStringBytes)
                 DATA_ENERGY -> parseEnergy(dataStringBytes)

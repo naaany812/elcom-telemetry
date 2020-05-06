@@ -2,6 +2,7 @@ package com.elcom.ServerFilestorage
 
 import com.elcom.ServerFilestorage.model.*
 import com.elcom.ServerFilestorage.repository.*
+import com.elcom.ServerFilestorage.storage.MeasuresFileLogger
 import com.elcom.ServerFilestorage.utils.CRC
 import com.elcom.ServerFilestorage.utils.HexParser
 import com.example.uploadingfiles.storage.FileSystemStorageService
@@ -91,7 +92,7 @@ open class ApiController {
             return energyRepository.findAll()
     }
 
-//    @GetMapping("/radio")
+    //    @GetMapping("/radio")
 //    fun getRadio(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataRadio> {
 //        //  measuresRepository.
 //        if (startDate != null && endDate != null && deviceUid != null) {
@@ -142,13 +143,28 @@ open class ApiController {
             for (data in measure.d) {
                 var result = HexParser.parseMeasure(measure.h, data)
                 var dev = deviceRepository.getFirstDeviceByUid(result.UID)
-                reply = Reply(dev.swVer!!.toLong(), HttpStatus.OK.value())
-                println(result)
-                when (result) {
-                    is DataClimate -> climateRepository.save(result)
-                    is DataEnergy -> energyRepository.save(result)
-                    is DataRadio -> { }
-                    else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
+                if (dev != null) {
+                    reply = Reply(dev.swVer!!.toLong(), HttpStatus.OK.value())
+                    when (result) {
+                        is DataClimate -> {
+                            climateRepository.save(result)
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, "temp")
+                            print("climate")
+                        }
+                        is DataEnergy -> {
+                            energyRepository.save(result)
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, "enrg")
+                            print("Energy")
+                        }
+                        is DataRadio -> {
+                            print("Radio")
+                        }
+                        else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
+                    }
+                }гы
+                else
+                {
+                    reply = Reply(0, HttpStatus.FORBIDDEN.value())
                 }
             }
         } catch (e: Exception) {
@@ -214,7 +230,7 @@ open class ApiController {
 
         var dev = deviceRepository.getFirstDeviceByUid(uid)
 
-        var fileData = filesService.getOne(dev.swId!!)
+        var fileData = filesService.getOne(dev!!.swId!!)
 
         val file: Resource = storageService.loadAsResource(fileData.name)
         val fileEncoded = Files.readAllBytes(file.file.toPath())
@@ -225,6 +241,7 @@ open class ApiController {
 
         return block
     }
+
     @PostMapping("/getFile2", produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE])
     @ResponseBody
     fun getFileBlock3(@RequestBody measure: MeasureHex): ResponseEntity<Any> {
@@ -235,18 +252,18 @@ open class ApiController {
         when (request) {
             is DataFileRequest -> {
                 var dev = deviceRepository.getFirstDeviceByUid(request.UID)
-                var fileData = filesService.getOne(dev.swId!!)
+                var fileData = filesService.getOne(dev!!.swId!!)
 
                 val file: Resource = storageService.loadAsResource(fileData.name)
                 val fileEncoded = Files.readAllBytes(file.file.toPath())
                 val block = fileEncoded.copyOfRange(request.from, request.to)
-          //      var header = HttpHeaders()
+                //      var header = HttpHeaders()
 //                header.add("status",)
 //                val map = HashMap<String, Any>()
 //                map.put("file",block)
 //                map.put("status",HttpStatus.OK.value())
 //                println("${request.from} - ${request.to}")
-                reply = ResponseEntity(block,HttpStatus.NOT_ACCEPTABLE)
+                reply = ResponseEntity(block, HttpStatus.NOT_ACCEPTABLE)
             }
             else -> {
                 println(request)
@@ -270,7 +287,7 @@ open class ApiController {
         when (request) {
             is DataFileRequest -> {
                 var dev = deviceRepository.getFirstDeviceByUid(request.UID)
-                var fileData = filesService.getOne(dev.swId!!)
+                var fileData = filesService.getOne(dev!!.swId!!)
 
                 val file: Resource = storageService.loadAsResource(fileData.name)
                 val fileEncoded = Files.readAllBytes(file.file.toPath())
@@ -293,7 +310,7 @@ open class ApiController {
     fun getFileSizeInBytes(@RequestParam("uid") uid: String): Long {
         var dev = deviceRepository.getFirstDeviceByUid(uid)
 
-        if (dev.swId == null)
+        if (dev!!.swId == null)
             return 0
 
         var fileData = filesService.getOne(dev.swId!!)
@@ -316,11 +333,11 @@ open class ApiController {
 
         println("$uid : $id")
         var dev = deviceRepository.getFirstDeviceByUid(uid)
-        dev.swId = id
+        dev!!.swId = id
         var file = filesService.getOne(id)
-        dev.swVer = file.version
-        dev.update = true
-        deviceRepository.save(dev)
+        dev!!.swVer = file.version
+        dev!!.update = true
+        deviceRepository.save(dev!!)
 
         return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
     }
@@ -328,7 +345,7 @@ open class ApiController {
     @GetMapping("/endUpdate")
     fun endUpdate(@RequestParam("uid") uid: String): Reply {
         var dev = deviceRepository.getFirstDeviceByUid(uid)
-        dev.update = false
+        dev!!.update = false
         deviceRepository.save(dev)
         return Reply(System.currentTimeMillis(), HttpStatus.OK.value())
     }
