@@ -209,7 +209,7 @@ function loadDevices(id) {
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(text)
                 cell2.appendChild(newText2)
-                
+
                 var cell2 = tr.insertCell()
                 var btn = document.createElement("BUTTON")
                 btn.innerHTML = "<a onClick='routeToMeasures(" + (tr.rowIndex - 1) + ");'>" +
@@ -231,9 +231,9 @@ function loadDevices(id) {
                 var newText2 = document.createTextNode(v.hwVer)
                 cell2.appendChild(newText2)
 
-                var text="Нет"
-                if(v.update)
-                text="Да"
+                var text = "Нет"
+                if (v.update)
+                    text = "Да"
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(text)
                 cell2.appendChild(newText2)
@@ -253,7 +253,7 @@ function createElementFromHTML(htmlString) {
 }
 function editSoftware(index) {
     selectedFile = files[index]
-    selectedDevice=currentDevices[index]
+    selectedDevice = currentDevices[index]
     if (selectedFile != undefined) {
         $("#modal_update_software").modal('show');
     }
@@ -278,7 +278,7 @@ function setListeners() {
         // You can directly create form data from the form element
         // (Or you could get the files from input element and append them to FormData as we did in vanilla javascript)
         var formData = new FormData(formElement);
-        
+
         var swVer = parseInt(document.getElementById("version_input").value, 10);
         formData.append('version', swVer)
         // formData.append(formElement)
@@ -335,9 +335,8 @@ function setListeners() {
 
     $("#button_save_device").on('click', function (e) {
         addDevice();
-        loadDevices(selectedTrain.systemId);
         console.log("Set the train as selected to see the new device: ", selectedTrain.trainType)
-        var trainRow = $("tr:contains('"+ selectedTrain.systemId + "')").get()
+        var trainRow = $("tr:contains('" + selectedTrain.systemId + "')").get()
         var index = $(trainRow).index()
         setSelectedTrain(index)
     });
@@ -347,9 +346,18 @@ function setListeners() {
     $("#modal_add_device").on('show.bs.modal', function () {
         loadHeadDevicesToList();
     });
+    $('#modal_add_device').on('hidden.bs.modal', function () {
+        $(this)
+            .find("input,textarea,select")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
+    });
 }
 
-function setSelectedTrain(index){
+function setSelectedTrain(index) {
     window.systemId = trains[index].systemId
     window.selectedTrain = trains[index]
     console.log(selectedTrain)
@@ -439,11 +447,11 @@ function loadSoftwareToElements() {
                 cell.appendChild(newText)
 
                 var cell = tr.insertCell()
-                var newText = document.createTextNode("v."+v.version)
+                var newText = document.createTextNode("v." + v.version)
                 cell.appendChild(newText)
 
                 var cell = tr.insertCell()
-                var newText = document.createTextNode(v.size+"B")
+                var newText = document.createTextNode(v.size + "B")
                 cell.appendChild(newText)
             });
         }
