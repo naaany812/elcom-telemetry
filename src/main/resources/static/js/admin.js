@@ -351,7 +351,7 @@ function setListeners() {
             .find("input,textarea,select")
             .val('')
             .end()
-            .find("input[type=checkbox], input[type=radio]")
+            .find("input[type=checkbox]")
             .prop("checked", "")
             .end();
     });
