@@ -314,9 +314,10 @@ function setListeners() {
     //     routeToMeasures(index);
     // });
     $("#button_save_train").on('click', function (e) {
-        extractTrain()
-        refreshTrains()
-        location.reload()
+        if(extractTrain()){
+            refreshTrains()
+            location.reload()
+        }
     });
 
     $("#button_update_file").on('click', function (e) {
@@ -368,7 +369,8 @@ function setSelectedTrain(index) {
     loadDevices(selectedTrain.systemId)
     setTimeout(() => {  
         console.log("Count of window.devices: ", window.currentDevices.length)
-        if(window.currentDevices.length >= window.selectedTrain.carCount){
+        //TODO: Add checks that only header car can have two devices due to current requirements.
+        if(window.currentDevices.length >= window.selectedTrain.carCount + 1){
             document.getElementById("button_add_device").disabled = true;
         }
         else{
@@ -540,21 +542,22 @@ function extractTrain() {
         systemId: code
     }
     console.log(train)
-    if (typeof cars == 'number' && type != "" && number != "") {
+    if (typeof cars == 'number' && cars > 0 && type != "" && number != "") {
         sendJson(JSON.stringify(train), "/api/add/systems")
         $('#modal_add_train').modal('hide');
+        return true
     }
     else {
         var error = "Ошибка: \n"
         if (typeof cars != 'number')
             error = error + "количество вагонов не численный тип\n"
-
         if (type == "")
             error = error + "поле 'тип' - пустое\n"
         if (number == "")
             error = error + "поле 'номер' - пустое\n"
 
         alert(error)
+        return false
     }
 }
 
