@@ -338,7 +338,9 @@ function setListeners() {
         console.log("Set the train as selected to see the new device: ", selectedTrain.trainType)
         var trainRow = $("tr:contains('" + selectedTrain.systemId + "')").get()
         var index = $(trainRow).index()
-        setSelectedTrain(index)
+        setTimeout(() => {
+            setSelectedTrain(index)
+        }, 300);
     });
     $("#checkbox_head").on('click', function (e) {
         check();
@@ -348,21 +350,33 @@ function setListeners() {
     });
     $('#modal_add_device').on('hidden.bs.modal', function () {
         $(this)
-            .find("input,textarea,select")
+            .find("input,textarea")
             .val('')
             .end()
-            .find("input[type=checkbox]")
-            .prop("checked", "")
+            .find("select")
+            .prop("selectedIndex", "0")
             .end();
     });
 }
 
 function setSelectedTrain(index) {
+    window.currentDevices = []
     window.systemId = trains[index].systemId
     window.selectedTrain = trains[index]
     console.log(selectedTrain)
-    $('#train_nameholder').html(selectedTrain.trainType + " " + selectedTrain.trainNumber)
+    $('#train_nameholder').html("Электропоезд: " + selectedTrain.trainType + " " + selectedTrain.trainNumber)
     loadDevices(selectedTrain.systemId)
+    setTimeout(() => {  
+        console.log("Count of window.devices: ", window.currentDevices.length)
+        if(window.currentDevices.length >= window.selectedTrain.carCount){
+            document.getElementById("button_add_device").disabled = true;
+        }
+        else{
+            document.getElementById("button_add_device").disabled = false;
+        } 
+    }, 300);
+    console.log("Count of cars: ", window.selectedTrain.carCount)
+
 }
 function updateFile() {
     var select = document.getElementById("software_modal_list")
@@ -464,6 +478,7 @@ function updateSoftware() {
 }
 
 function addDevice() {
+    hasErrors = false
     if (selectedTrain != undefined) {
         var deviceHwId = parseInt(document.getElementById("text_device_id").value, 10);
         var deviceHead = deviceHwId
@@ -473,6 +488,7 @@ function addDevice() {
             deviceHead = parseInt(select.value, 10)
         }
         var carNumber = parseInt(document.getElementById("text_car_number").value, 10);
+        if( deviceHwId <= 0 || carNumber <= 0) hasErrors = true
         var type = document.getElementById("select_car_types").value
         var name = document.getElementById("select_device_types").value
         var tid = selectedTrain.systemId
@@ -485,19 +501,23 @@ function addDevice() {
             name: name,
             trainId: tid
         }
-        if (carNumber <= selectedTrain.carCount) {
+        if (carNumber <= selectedTrain.carCount && !hasErrors) {
             console.log(device)
             sendJson(JSON.stringify(device), "/api/add/devices")
             $('#modal_add_device').modal('hide');
         }
-        else {
+        else{
             var error = "Ошибка: \n"
             if (typeof deviceHwId != 'number')
                 error = error + "идентификатор не численный тип\n"
+            if( deviceHwId < 0)
+                error = error + "Идентификатор меньше нуля!\n"
             if (typeof deviceHead != 'number')
-                error = error + "идентификатор головного устройства не численный тип\n"
+                error = error + "Идентификатор головного устройства не численный тип\n"
+            if( carNumber < 0)
+                error = error + "Номер вагона меньше нуля!\n"
             if (carNumber > selectedTrain.carCount)
-                error = error + "номер вагона превышает допустимый\n"
+                error = error + "Номер вагона превышает допустимый\n"
 
             alert(error)
         }
