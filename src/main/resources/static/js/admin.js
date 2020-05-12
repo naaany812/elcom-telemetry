@@ -482,15 +482,16 @@ function updateSoftware() {
 function addDevice() {
     hasErrors = false
     if (selectedTrain != undefined) {
-        var deviceHwId = parseInt(document.getElementById("text_device_id").value, 10);
+        var deviceHwId = document.getElementById("text_device_id").value;
+        console.log("deviceHwId from form: ", document.getElementById("text_device_id").value, deviceHwId.length)
         var deviceHead = deviceHwId
 
         if (!document.getElementById('checkbox_head').checked) {
             var select = document.getElementById("head_devices_modal_list")
-            deviceHead = parseInt(select.value, 10)
+            deviceHead = select.value
         }
         var carNumber = parseInt(document.getElementById("text_car_number").value, 10);
-        if( deviceHwId <= 0 || carNumber <= 0) hasErrors = true
+        if( deviceHwId.length == 0 || carNumber <= 0 || isNaN(carNumber)) hasErrors = true
         var type = document.getElementById("select_car_types").value
         var name = document.getElementById("select_device_types").value
         var tid = selectedTrain.systemId
@@ -510,12 +511,8 @@ function addDevice() {
         }
         else{
             var error = "Ошибка: \n"
-            if (typeof deviceHwId != 'number')
-                error = error + "идентификатор не численный тип\n"
-            if( deviceHwId < 0)
-                error = error + "Идентификатор меньше нуля!\n"
-            if (typeof deviceHead != 'number')
-                error = error + "Идентификатор головного устройства не численный тип\n"
+            if (deviceHwId.length == 0)
+                 error = error + "Идентификатор - пустой!\n"
             if( carNumber < 0)
                 error = error + "Номер вагона меньше нуля!\n"
             if (carNumber > selectedTrain.carCount)
