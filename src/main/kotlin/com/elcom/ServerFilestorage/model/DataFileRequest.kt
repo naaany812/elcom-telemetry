@@ -13,7 +13,7 @@ data class DataFileRequest (
         override var idTrain: Int = 0,
         override var idWagon: Int =0,
         override var receiverCode: Int=0,
-        override var deviceId: Int=0,
+        override var deviceId: String ="00",
         override var commandType: Int=0,
         override var timestamp: Timestamp = Timestamp(0),
         override var timestampReceived: Timestamp = Timestamp(0),

@@ -9,14 +9,21 @@ import java.util.*
 
 class MeasuresFileLogger() {
     companion object {
-        fun saveMessage(message: String,timestamp: Timestamp, ext: String) {
-            var cal = Calendar.getInstance()
-            // var filename = cal.time
+        val CODE_BKTE = "10"
+        val CODE_BKT = "11"
+        val CODE_BSG = "12"
+        fun saveMessage(message: String, timestamp: Timestamp, uid: String, ext: String, code: String) {
             val format = SimpleDateFormat("dd-MM-yyyy")
             val filename = format.format(timestamp)
-            val path = File("./logs/")
+            val path = File("./logs/${uid}/")
+            val type = when (code) {
+                CODE_BKTE -> "BKTE"
+                CODE_BKT -> "BKT"
+                CODE_BSG -> "BSG"
+                else -> "UNKNOWN"
+            }
             path.mkdirs()
-            var file = File(path,"$filename.$ext")
+            var file = File(path, "${filename}_${type}_${uid}.$ext")
             if (!file.exists()) {
                 file.createNewFile()
             }

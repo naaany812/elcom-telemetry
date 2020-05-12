@@ -148,12 +148,12 @@ open class ApiController {
                     when (result) {
                         is DataClimate -> {
                             climateRepository.save(result)
-                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, "temp")
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}",  result.timestamp, result.UID,"temp", result.deviceId)
                             print("climate")
                         }
                         is DataEnergy -> {
                             energyRepository.save(result)
-                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, "enrg")
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, result.UID,"enrg", result.deviceId)
                             print("Energy")
                         }
                         is DataRadio -> {

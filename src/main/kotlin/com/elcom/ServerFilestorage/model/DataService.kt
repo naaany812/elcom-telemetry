@@ -21,7 +21,7 @@ data class DataService(
         @Column(name = "receiver_code")
         override var receiverCode: Int=0,
         @Column(name = "device_id")
-        override var deviceId: Int=0,
+        override var deviceId: String ="00",
         @Column(name = "command_type")
         override var commandType: Int=0,
         @Column(name = "time")

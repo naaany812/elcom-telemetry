@@ -8,7 +8,7 @@ open class HeaderMeasure(
         open var idTrain: Int = 0,
         open var idWagon: Int =0,
         open var receiverCode: Int = 0,
-        open var deviceId: Int =0,
+        open var deviceId: String ="00",
         open var commandType: Int=0,
         open var timestamp: Timestamp=Timestamp(0),
         open var timestampReceived: Timestamp=Timestamp(0)

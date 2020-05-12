@@ -6,9 +6,6 @@ import java.sql.Timestamp
 
 class HexParser {
     companion object {
-        val CODE_BKTE = "10"
-        val CODE_BKT = "11"
-        val CODE_BSG = "12"
 
         val DATA_CLIMATE = "40"
         val DATA_ENERGY = "50"
@@ -44,7 +41,7 @@ class HexParser {
             header.idTrain = (bytes[13] + bytes[14]).toInt(16)
             header.idWagon = bytes[15].toInt(16)
             header.receiverCode = (bytes[16] + bytes[17]).toInt(16)
-            header.deviceId = dataStringBytes[2].toInt(16)
+            header.deviceId = dataStringBytes[2]
             header.commandType = dataStringBytes[3].toInt(16)
             header.timestamp = Timestamp(dataStringBytes.subList(4, 8).joinToString("").toLong(16)*1000)
             header.timestampReceived = Timestamp(System.currentTimeMillis())
