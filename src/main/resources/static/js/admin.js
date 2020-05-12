@@ -209,7 +209,7 @@ function loadDevices(id) {
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(text)
                 cell2.appendChild(newText2)
-                
+
                 var cell2 = tr.insertCell()
                 var btn = document.createElement("BUTTON")
                 btn.innerHTML = "<a onClick='routeToMeasures(" + (tr.rowIndex - 1) + ");'>" +
@@ -231,9 +231,9 @@ function loadDevices(id) {
                 var newText2 = document.createTextNode(v.hwVer)
                 cell2.appendChild(newText2)
 
-                var text="Нет"
-                if(v.update)
-                text="Да"
+                var text = "Нет"
+                if (v.update)
+                    text = "Да"
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(text)
                 cell2.appendChild(newText2)
@@ -253,7 +253,7 @@ function createElementFromHTML(htmlString) {
 }
 function editSoftware(index) {
     selectedFile = files[index]
-    selectedDevice=currentDevices[index]
+    selectedDevice = currentDevices[index]
     if (selectedFile != undefined) {
         $("#modal_update_software").modal('show');
     }
@@ -278,7 +278,7 @@ function setListeners() {
         // You can directly create form data from the form element
         // (Or you could get the files from input element and append them to FormData as we did in vanilla javascript)
         var formData = new FormData(formElement);
-        
+
         var swVer = parseInt(document.getElementById("version_input").value, 10);
         formData.append('version', swVer)
         // formData.append(formElement)
@@ -314,9 +314,10 @@ function setListeners() {
     //     routeToMeasures(index);
     // });
     $("#button_save_train").on('click', function (e) {
-        extractTrain()
-        refreshTrains()
-        location.reload()
+        if(extractTrain()){
+            refreshTrains()
+            location.reload()
+        }
     });
 
     $("#button_update_file").on('click', function (e) {
@@ -335,11 +336,12 @@ function setListeners() {
 
     $("#button_save_device").on('click', function (e) {
         addDevice();
-        loadDevices(selectedTrain.systemId);
         console.log("Set the train as selected to see the new device: ", selectedTrain.trainType)
-        var trainRow = $("tr:contains('"+ selectedTrain.systemId + "')").get()
+        var trainRow = $("tr:contains('" + selectedTrain.systemId + "')").get()
         var index = $(trainRow).index()
-        setSelectedTrain(index)
+        setTimeout(() => {
+            setSelectedTrain(index)
+        }, 300);
     });
     $("#checkbox_head").on('click', function (e) {
         check();
@@ -347,14 +349,36 @@ function setListeners() {
     $("#modal_add_device").on('show.bs.modal', function () {
         loadHeadDevicesToList();
     });
+    $('#modal_add_device').on('hidden.bs.modal', function () {
+        $(this)
+            .find("input,textarea")
+            .val('')
+            .end()
+            .find("select")
+            .prop("selectedIndex", "0")
+            .end();
+    });
 }
 
-function setSelectedTrain(index){
+function setSelectedTrain(index) {
+    window.currentDevices = []
     window.systemId = trains[index].systemId
     window.selectedTrain = trains[index]
     console.log(selectedTrain)
-    $('#train_nameholder').html(selectedTrain.trainType + " " + selectedTrain.trainNumber)
+    $('#train_nameholder').html("Электропоезд: " + selectedTrain.trainType + " " + selectedTrain.trainNumber)
     loadDevices(selectedTrain.systemId)
+    setTimeout(() => {  
+        console.log("Count of window.devices: ", window.currentDevices.length)
+        //TODO: Add checks that only header car can have two devices due to current requirements.
+        if(window.currentDevices.length >= window.selectedTrain.carCount + 1){
+            document.getElementById("button_add_device").disabled = true;
+        }
+        else{
+            document.getElementById("button_add_device").disabled = false;
+        } 
+    }, 300);
+    console.log("Count of cars: ", window.selectedTrain.carCount)
+
 }
 function updateFile() {
     var select = document.getElementById("software_modal_list")
@@ -439,11 +463,11 @@ function loadSoftwareToElements() {
                 cell.appendChild(newText)
 
                 var cell = tr.insertCell()
-                var newText = document.createTextNode("v."+v.version)
+                var newText = document.createTextNode("v." + v.version)
                 cell.appendChild(newText)
 
                 var cell = tr.insertCell()
-                var newText = document.createTextNode(v.size+"B")
+                var newText = document.createTextNode(v.size + "B")
                 cell.appendChild(newText)
             });
         }
@@ -456,15 +480,18 @@ function updateSoftware() {
 }
 
 function addDevice() {
+    hasErrors = false
     if (selectedTrain != undefined) {
-        var deviceHwId = parseInt(document.getElementById("text_device_id").value, 10);
+        var deviceHwId = document.getElementById("text_device_id").value;
+        console.log("deviceHwId from form: ", document.getElementById("text_device_id").value, deviceHwId.length)
         var deviceHead = deviceHwId
 
         if (!document.getElementById('checkbox_head').checked) {
             var select = document.getElementById("head_devices_modal_list")
-            deviceHead = parseInt(select.value, 10)
+            deviceHead = select.value
         }
         var carNumber = parseInt(document.getElementById("text_car_number").value, 10);
+        if( deviceHwId.length == 0 || carNumber <= 0 || isNaN(carNumber)) hasErrors = true
         var type = document.getElementById("select_car_types").value
         var name = document.getElementById("select_device_types").value
         var tid = selectedTrain.systemId
@@ -477,19 +504,19 @@ function addDevice() {
             name: name,
             trainId: tid
         }
-        if (carNumber <= selectedTrain.carCount) {
+        if (carNumber <= selectedTrain.carCount && !hasErrors) {
             console.log(device)
             sendJson(JSON.stringify(device), "/api/add/devices")
             $('#modal_add_device').modal('hide');
         }
-        else {
+        else{
             var error = "Ошибка: \n"
-            if (typeof deviceHwId != 'number')
-                error = error + "идентификатор не численный тип\n"
-            if (typeof deviceHead != 'number')
-                error = error + "идентификатор головного устройства не численный тип\n"
+            if (deviceHwId.length == 0)
+                 error = error + "Идентификатор - пустой!\n"
+            if( carNumber < 0)
+                error = error + "Номер вагона меньше нуля!\n"
             if (carNumber > selectedTrain.carCount)
-                error = error + "номер вагона превышает допустимый\n"
+                error = error + "Номер вагона превышает допустимый\n"
 
             alert(error)
         }
@@ -512,21 +539,22 @@ function extractTrain() {
         systemId: code
     }
     console.log(train)
-    if (typeof cars == 'number' && type != "" && number != "") {
+    if (typeof cars == 'number' && cars > 0 && type != "" && number != "") {
         sendJson(JSON.stringify(train), "/api/add/systems")
         $('#modal_add_train').modal('hide');
+        return true
     }
     else {
         var error = "Ошибка: \n"
         if (typeof cars != 'number')
             error = error + "количество вагонов не численный тип\n"
-
         if (type == "")
             error = error + "поле 'тип' - пустое\n"
         if (number == "")
             error = error + "поле 'номер' - пустое\n"
 
         alert(error)
+        return false
     }
 }
 
@@ -543,6 +571,7 @@ String.prototype.hashCode = function () {
         hash = ((hash << 5) - hash) + chr;
         hash |= 0; // Convert to 32bit integer
     }
+    if (hash < 0) hash*=-1;
     return hash;
 };
 
