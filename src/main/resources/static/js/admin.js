@@ -117,7 +117,9 @@ function loadClimate(start, end, deviceUid) {
                 var cell = tr.insertCell()
                 var newText = document.createTextNode(dateFormat(new Date(v.timestamp), 'd-m-Y h:i:s'))
                 cell.appendChild(newText)
-
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(dateFormat(new Date(v.timestampReceived), 'd-m-Y h:i:s'))
+                cell.appendChild(newText)
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(v.channel1)
                 cell2.appendChild(newText2)
@@ -155,7 +157,9 @@ function loadEnergy(start, end, deviceUid) {
                 var cell = tr.insertCell()
                 var newText = document.createTextNode(dateFormat(new Date(v.timestamp), 'd-m-Y h:i:s'))
                 cell.appendChild(newText)
-
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(dateFormat(new Date(v.timestampReceived), 'd-m-Y h:i:s'))
+                cell.appendChild(newText)
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(v.amperage)
                 cell2.appendChild(newText2)
@@ -513,8 +517,8 @@ function addDevice() {
             var error = "Ошибка: \n"
             if (deviceHwId.length == 0)
                  error = error + "Идентификатор - пустой!\n"
-            if( carNumber < 0)
-                error = error + "Номер вагона меньше нуля!\n"
+            if( carNumber <= 0)
+                error = error + "Номер вагона меньше или равен нулю!\n"
             if (carNumber > selectedTrain.carCount)
                 error = error + "Номер вагона превышает допустимый\n"
 

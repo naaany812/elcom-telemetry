@@ -136,16 +136,15 @@
                     <section class="clean-block clean-services dark" style="width: 100%;background-color: rgba(246,246,246,0);">
                         <div class="container">
                             <div class="row" style="margin-bottom: 40px;">
-                                <div class="col d-flex align-items-center"><span class="d-xl-flex justify-content-xl-end" id="device_nameholder">Устройство</span></div>
-                                <div class="col-md-3 d-flex align-items-center" style="padding: 17px;"><input type="text" id="reportrange" style="padding: 6px 12px;" name="reportrange"></div>
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <span class="d-xl-flex justify-content-xl-end" id="device_nameholder">Устройство</span></div>
+                                <div class="col-md-6 d-flex align-items-center" style="padding: 17px;">
+                                    <label class="d-xl-flex justify-content-xl-end" for="reportrange" style="padding: 6px 12px; margin-top: 10px;">Фильтр по дате: </label>
+                                    <input type="text" id="reportrange" style="padding: 6px 12px;" name="reportrange"></div>
                                 <div class="col-md-3"></div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <div class="col-md-4 col-md-6 align-items-center" style="min-height: 40vh;">
-                                    <p class="text-center" style="margin: 0px;margin-bottom: 10px;">Характеристика</p>
-                                    <div id="chart_climate_div"><canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[],&quot;datasets&quot;:[]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:true,&quot;reverse&quot;:false},&quot;title&quot;:{&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;ticks&quot;:{&quot;beginAtZero&quot;:true}}],&quot;yAxes&quot;:[{&quot;ticks&quot;:{&quot;beginAtZero&quot;:true}}]}}}"></canvas></div>
-                                </div>
-                                <div class="col col-md-6" style="min-height: 20vh;">
+                                <div class="col col-md-8" style="min-height: 20vh;">
                                     <div>
                                         <ul class="nav nav-tabs">
                                             <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-climate">Температура</a></li>
@@ -159,7 +158,8 @@
                                                     <table class="table table-bordered table-hover">
                                                         <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
                                                         <tr style="position: sticky;top: 0;">
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время отправки</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Канал 1</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Канал 2</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Канал 3</th>
@@ -177,7 +177,8 @@
                                                     <table class="table table-bordered table-hover">
                                                         <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
                                                         <tr style="position: sticky;top: 0;">
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время отправки</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Ток</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Напряжение</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Активная эенергия</th>
