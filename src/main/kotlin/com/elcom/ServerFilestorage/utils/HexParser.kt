@@ -98,7 +98,7 @@ class HexParser {
             )
         }
         private fun parseFile(dataStringBytes: List<String>): DataFileRequest {
-            print("file parsed")
+            println("file parsed")
             return DataFileRequest(
                     from = dataStringBytes.subList(8, 12).joinToString("").toInt(16),
                     to = dataStringBytes.subList(12, 16).joinToString("").toInt(16)
