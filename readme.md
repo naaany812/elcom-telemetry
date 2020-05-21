@@ -17,6 +17,16 @@ $ sudo -u postgres -i
 $ psql telemtry < db/telemetry_localhost-dump.sql
 ```
 
+Для миграции базы данных:
+
+```gradle tasks
+flywayBaseline - для подключений существующей БД к flyway
+...
+При внесении изменений в структуру БД, создать скрипт в папке src/main/resources/db/migration
+...
+flywayMigrate - для миграции изменений из скриптов папки migration в базу данных
+```
+
 Настройки сервера, указать необходимый IP:
 
 `src/main/resources/application.properties`
