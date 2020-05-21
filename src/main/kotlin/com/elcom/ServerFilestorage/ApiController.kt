@@ -159,6 +159,9 @@ open class ApiController {
                         is DataRadio -> {
                             print("Radio")
                         }
+                        is DataGeo -> {
+                            print("Geo")
+                        }
                         else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
                     }
                 }
