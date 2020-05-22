@@ -19,10 +19,12 @@ $ psql telemtry < db/telemetry_localhost-dump.sql
 
 Для миграции базы данных:
 
+https://flywaydb.org/documentation/
 ```gradle tasks
 flywayBaseline - для подключений существующей БД к flyway
 ...
 При внесении изменений в структуру БД, создать скрипт в папке src/main/resources/db/migration
+Между версией и описанием должно быть обязательно два нижних подчёркивания.
 ...
 flywayMigrate - для миграции изменений из скриптов папки migration в базу данных
 ```
