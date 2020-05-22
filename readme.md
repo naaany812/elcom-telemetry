@@ -36,13 +36,15 @@ $ java -jar /build/libs/filename.jar
 
 ## Миграция db
 
-https://flywaydb.org/documentation/
-При внесении изменений в структуру БД, создать скрипт в папке src/main/resources/db/migration между версией и описанием должно быть обязательно два нижних подчёркивания.
+https://flywaydb.org/documentation/ При внесении изменений в структуру БД,
+создать скрипт в папке src/main/resources/db/migration между версией и описанием
+должно быть обязательно два нижних подчёркивания.
+
 ### gradle tasks:
+
 - flywayBaseline - для подключений существующей БД к flyway
-- flywayMigrate - для миграции изменений из скриптов папки migration в базу данных
-
-
+- flywayMigrate - для миграции изменений из скриптов папки migration в базу
+  данных
 
 ## Описание REST API
 
