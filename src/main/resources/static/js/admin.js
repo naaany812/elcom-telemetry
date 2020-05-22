@@ -46,6 +46,7 @@ $(document).ready(function () {
     }, function (start, end, label) {
         $("#table_climate tbody tr").remove();
         $("#table_energy tbody tr").remove();
+        $("#table_geo tbody tr").remove();
         console.log("applyed")
         loadEnergy(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
         loadClimate(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
@@ -398,6 +399,7 @@ function updateFile() {
 function routeToMeasures(index) {
     $("#table_climate tbody tr").remove();
     $("#table_energy tbody tr").remove();
+    $("#table_geo tbody tr").remove();
     selectedDevice = currentDevices[index]
     $('.nav-tabs a[href="#tab-2"]').tab('show')
     console.log(currentDevices[index])
