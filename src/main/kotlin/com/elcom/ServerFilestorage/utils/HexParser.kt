@@ -15,27 +15,29 @@ class HexParser {
         val DATA_GEO = "60"
 
 
-        fun parseMeasure(header: String , data: String) : HeaderMeasure {
+        fun parseMeasure(header: String, data: String): HeaderMeasure {
             //  var result = Measure()
-          //  println("parsing measure")
+            //  println("parsing measure")
             val headerStringBytes = header.chunked(2)
             val dataStringBytes = data.chunked(2)
 
-        //    println(dataStringBytes[3])
+            //   println(dataStringBytes[3])
             val result = when (dataStringBytes[3]) {
                 DATA_CLIMATE -> parseClimate(dataStringBytes)
                 DATA_ENERGY -> parseEnergy(dataStringBytes)
                 DATA_SERVICE -> parseService(dataStringBytes)
                 DATA_RADIO -> parseRadio(dataStringBytes)
-                DATA_GEO -> parseGeo(dataStringBytes)
-                DATA_FILE ->parseFile(dataStringBytes)
+                DATA_GEO -> parseGeo(data)
+                DATA_FILE -> parseFile(dataStringBytes)
                 else -> HeaderMeasure()
             }
-            return parseHeader(result, headerStringBytes, dataStringBytes)
+            var res = parseHeader(result, headerStringBytes, dataStringBytes)
+            println(res)
+            return res
         }
 
         private fun parseHeader(header: HeaderMeasure, bytes: List<String>, dataStringBytes: List<String>): HeaderMeasure {
-         //   println("parsing header")
+            //   println("parsing header")
             header.orderNum = dataStringBytes.subList(0, 1).joinToString("").toInt(16)
             header.UID = bytes.subList(1, 13).joinToString("")
             header.idTrain = (bytes[13] + bytes[14]).toInt(16)
@@ -43,9 +45,9 @@ class HexParser {
             header.receiverCode = (bytes[16] + bytes[17]).toInt(16)
             header.deviceId = dataStringBytes[2]
             header.commandType = dataStringBytes[3].toInt(16)
-            header.timestamp = Timestamp(dataStringBytes.subList(4, 8).joinToString("").toLong(16)*1000)
+            header.timestamp = Timestamp(dataStringBytes.subList(4, 8).joinToString("").toLong(16) * 1000)
             header.timestampReceived = Timestamp(System.currentTimeMillis())
-          //  println(header)
+            //  println(header)
             return header
         }
 
@@ -81,22 +83,24 @@ class HexParser {
             return DataRadio(
                     rssi = dataStringBytes[8].toInt(16),
                     rssiReverse = dataStringBytes[9].toInt(16),
-            receivedCount = dataStringBytes.subList(10, 14).joinToString("").toLong(16),
-            totalCount = dataStringBytes.subList(14, 18).joinToString("").toLong(16))
+                    receivedCount = dataStringBytes.subList(10, 14).joinToString("").toLong(16),
+                    totalCount = dataStringBytes.subList(14, 18).joinToString("").toLong(16))
         }
 
-        private fun parseGeo(dataStringBytes: List<String>): DataGeo {
+        private fun parseGeo(dataStringBytes: String): DataGeo {
+
+            var data = dataStringBytes.split(' ')
+            var dataGeoSplitted = data[1].split(',')
             return DataGeo(
-                    latitude = dataStringBytes.subList(8, 12).joinToString("").toInt(16),
-                    longitude = dataStringBytes.subList(12, 16).joinToString("").toInt(16),
-                    speed = dataStringBytes.subList(16, 18).joinToString("").toInt(16),
-                    angle = dataStringBytes.subList(18, 20).joinToString("").toInt(16),
-                    UTC = dataStringBytes.subList(20, 24).joinToString("").toInt(16),
-                    flag = dataStringBytes[24].toInt(16),
-                    satCount = dataStringBytes[25].toInt(16)
+                    latitude = "${dataGeoSplitted[0]}${dataGeoSplitted[1]}",
+                    longitude = "${dataGeoSplitted[2]}${dataGeoSplitted[3]}",
+                    alt = dataGeoSplitted[4].toDouble(),
+                    speed = dataGeoSplitted[5].toDouble(),
+                    course = dataGeoSplitted[6].toDouble()
 
             )
         }
+
         private fun parseFile(dataStringBytes: List<String>): DataFileRequest {
             println("file parsed")
             return DataFileRequest(

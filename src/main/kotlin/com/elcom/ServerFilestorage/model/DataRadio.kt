@@ -1,11 +1,10 @@
 package com.elcom.ServerFilestorage.model
 
 import java.sql.Timestamp
-import javax.persistence.Column
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
+@Entity
+@Table(name = "data_rssi")
 data class DataRadio(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,8 +27,12 @@ data class DataRadio(
         override var timestamp: Timestamp = Timestamp(0),
         @Column(name = "time_received")
         override var timestampReceived: Timestamp = Timestamp(0),
+        @Column(name = "rssi")
         val rssi: Int=0,
+        @Column(name = "rssi_reverse")
         val rssiReverse: Int=0,
+        @Column(name = "received_count")
         val receivedCount: Long = 0,
+        @Column(name = "total_count")
         val totalCount: Long = 0
 ) : HeaderMeasure()

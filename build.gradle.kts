@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.contracts.model.structure.UNKNOWN_COMPUTATION.type
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "2.2.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
+    id("org.flywaydb.flyway") version "6.4.2"
     kotlin("jvm") version "1.3.61"
     kotlin("plugin.spring") version "1.3.61"
     kotlin("plugin.jpa") version "1.3.50"
@@ -58,3 +60,18 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "1.8"
     }
 }
+
+flyway {
+    url = "jdbc:postgresql://localhost:5432/telemetry"
+    user = "postgres"
+    password = "postgres"
+    schemas = arrayOf("public")
+    baselineOnMigrate = true
+    locations = arrayOf("filesystem:src/main/resources/db/migration")
+}
+/*
+task migrateDatabase2(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    url = 'jdbc:h2:mem:mydb2'
+    user = 'myUsr2'
+    password = 'mySecretPwd2'
+}*/
