@@ -267,7 +267,7 @@ function loadDevices(id) {
             var headDev = []
             // console.log(data.responseData.resultText)
             $.each(data, function (k, v) {
-                //     console.log(k, v);
+                     console.log(k, v);
                 // var keys = ["trainType", "trainNumber"];
                 var tr = table.insertRow()
                 if (v.deviceHwId)
@@ -290,6 +290,10 @@ function loadDevices(id) {
 
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(text)
+                cell2.appendChild(newText2)
+
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.name)
                 cell2.appendChild(newText2)
 
                 var cell2 = tr.insertCell()

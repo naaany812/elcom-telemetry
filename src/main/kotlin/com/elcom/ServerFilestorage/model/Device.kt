@@ -33,5 +33,7 @@ data class Device
         @Column(name = "sw_link")
         var swId: Int? = 0,
         @Column(name = "updates")
-        var update: Boolean = false
+        var update: Boolean = false,
+        @Column(name = "name")
+        var name: String = "UNKNOWN"
 )
