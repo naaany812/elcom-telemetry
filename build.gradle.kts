@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.contracts.model.structure.UNKNOWN_COMPUTATION.type
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -64,5 +65,13 @@ flyway {
     url = "jdbc:postgresql://localhost:5432/telemetry"
     user = "postgres"
     password = "postgres"
-    schemas = Array<String>(1) { "public" }
+    schemas = arrayOf("public")
+    baselineOnMigrate = true
+    locations = arrayOf("filesystem:src/main/resources/db/migration")
 }
+/*
+task migrateDatabase2(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    url = 'jdbc:h2:mem:mydb2'
+    user = 'myUsr2'
+    password = 'mySecretPwd2'
+}*/

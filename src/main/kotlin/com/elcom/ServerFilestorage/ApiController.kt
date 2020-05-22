@@ -33,8 +33,6 @@ import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 @RequestMapping("/api")
 open class ApiController {
     @Autowired
-    lateinit var measuresRepository: MeasuresRepository
-    @Autowired
     lateinit var deviceRepository: DeviceRepository
     @Autowired
     lateinit var systemRepository: SystemRepository
@@ -43,38 +41,22 @@ open class ApiController {
     @Autowired
     lateinit var climateRepository: DataClimateRepository
     @Autowired
+    lateinit var geoRepository: DataGeoRepository
+    @Autowired
+    lateinit var radioRepository: DataRadioRepository
+    @Autowired
     lateinit var storageService: FileSystemStorageService
     @Autowired
     lateinit var filesService: FileDataRepository
-
-    @GetMapping("/measures")
-    fun getMeasures(@RequestParam(required = false) startDate: Date?, @RequestParam(required = false) endDate: Date?, @RequestParam(required = false) systemId: Int?): List<Measure> {
-        //  measuresRepository.
-        if (startDate != null && endDate != null && systemId != null) {
-            println("range formed")
-            return measuresRepository.getRangeForSystem(startDate, endDate, systemId)
-        } else
-            return measuresRepository.findAll()
-    }
 
     @GetMapping("/files")
     fun getFilesList(): List<FileData> {
         return filesService.findAll()
     }
 
-    @GetMapping("/measuresnew")
-    fun getMeasuresNew(@RequestParam(required = false) startDate: Date?, @RequestParam(required = false) endDate: Date?, @RequestParam(required = false) systemId: Int?): List<Measure> {
-        //  measuresRepository.
-        if (startDate != null && endDate != null && systemId != null) {
-            println("range formed")
-            return measuresRepository.getRangeForSystem(startDate, endDate, systemId)
-        } else
-            return measuresRepository.findAll()
-    }
 
     @GetMapping("/climate")
     fun getClimate(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataClimate> {
-        //  measuresRepository.
         if (startDate != null && endDate != null && deviceUid != null) {
             println("$startDate - $endDate")
             return climateRepository.getRange(Timestamp.valueOf("$startDate 00:00:00"), Timestamp.valueOf("$endDate 00:00:00"), deviceUid)
@@ -84,7 +66,6 @@ open class ApiController {
 
     @GetMapping("/energy")
     fun getEnergy(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataEnergy> {
-        //  measuresRepository.
         if (startDate != null && endDate != null && deviceUid != null) {
             println("$startDate - $endDate")
             return energyRepository.getRange(Timestamp.valueOf("$startDate 00:00:00"), Timestamp.valueOf("$endDate 00:00:00"), deviceUid)
@@ -92,15 +73,24 @@ open class ApiController {
             return energyRepository.findAll()
     }
 
-    //    @GetMapping("/radio")
-//    fun getRadio(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataRadio> {
-//        //  measuresRepository.
-//        if (startDate != null && endDate != null && deviceUid != null) {
-//            println("$startDate - $endDate")
-//            return energyRepository.getRange(Timestamp.valueOf("$startDate 00:00:00"), Timestamp.valueOf("$endDate 00:00:00"), deviceUid)
-//        } else
-//            return energyRepository.findAll()
-//    }
+    @GetMapping("/radio")
+    fun getRadio(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataRadio> {
+        if (startDate != null && endDate != null && deviceUid != null) {
+            println("$startDate - $endDate")
+            return radioRepository.getRange(Timestamp.valueOf("$startDate 00:00:00"), Timestamp.valueOf("$endDate 00:00:00"), deviceUid)
+        } else
+            return radioRepository.findAll()
+    }
+
+    @GetMapping("/geo")
+    fun getGeo(@RequestParam(required = false) startDate: String?, @RequestParam(required = false) endDate: String?, @RequestParam(required = false) deviceUid: String?): List<DataGeo> {
+        if (startDate != null && endDate != null && deviceUid != null) {
+            println("$startDate - $endDate")
+            return geoRepository.getRange(Timestamp.valueOf("$startDate 00:00:00"), Timestamp.valueOf("$endDate 00:00:00"), deviceUid)
+        } else
+            return geoRepository.findAll()
+    }
+
     @GetMapping("/time")
     fun getTimestamp(): ReplyTime {
         return ReplyTime(System.currentTimeMillis(), HttpStatus.OK.value())
@@ -135,8 +125,9 @@ open class ApiController {
     }
 
     @PostMapping(path = arrayOf("/add/measures"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
-    fun addOrUpdateMeasure(@RequestBody measure: MeasureHex): Reply {
+    fun addOrUpdateMeasure(request: HttpServletRequest, @RequestBody measure: MeasureHex): Reply {
         // println(measure)
+
         var reply = Reply(0, HttpStatus.BAD_REQUEST.value())
         try {
             println(measure)
@@ -148,44 +139,32 @@ open class ApiController {
                     when (result) {
                         is DataClimate -> {
                             climateRepository.save(result)
-                            MeasuresFileLogger.saveMessage("${measure.h}${data}",  result.timestamp, result.UID,"temp", result.deviceId)
-                            print("climate")
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, result.UID, "temp", result.deviceId)
                         }
                         is DataEnergy -> {
                             energyRepository.save(result)
-                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, result.UID,"enrg", result.deviceId)
-                            print("Energy")
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, result.UID, "enrg", result.deviceId)
                         }
                         is DataRadio -> {
-                            print("Radio")
+                            radioRepository.save(result)
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, result.UID, "rssi", result.deviceId)
                         }
-                        else -> reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
+                        is DataGeo -> {
+                            geoRepository.save(result)
+                            MeasuresFileLogger.saveMessage("${measure.h}${data}", result.timestamp, result.UID, "geo", result.deviceId)
+                        }
+                        else -> {
+                            println("Wtf? Not acceptable")
+                            reply = Reply(dev.swVer!!.toLong(), HttpStatus.NOT_ACCEPTABLE.value())
+                        }
                     }
-                }
-                else
-                {
+                } else {
                     reply = Reply(0, HttpStatus.FORBIDDEN.value())
                 }
             }
         } catch (e: Exception) {
             reply = Reply(0, HttpStatus.BAD_REQUEST.value())
             e.printStackTrace()
-        }
-        return reply
-    }
-
-    @PostMapping(path = arrayOf("/add/measuresold"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
-    fun addOrUpdateMeasureOld(@RequestBody measure: Measure): Reply {
-        var reply = Reply(System.currentTimeMillis(), HttpStatus.OK.value())
-        println(measure)
-        try {
-            val day = measure.dateGSM.chunked(2).map { Integer.parseInt(it) }
-            val time = measure.timeGSM.chunked(2).map { Integer.parseInt(it) }
-            measure.date = Date((100 + day[2]), day[1] - 1, day[0])
-            measure.time = Time(time[2], time[1], time[0])
-            measuresRepository.save(measure)
-        } catch (e: Exception) {
-            reply = Reply(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value())
         }
         return reply
     }
@@ -257,12 +236,6 @@ open class ApiController {
                 val file: Resource = storageService.loadAsResource(fileData.name)
                 val fileEncoded = Files.readAllBytes(file.file.toPath())
                 val block = fileEncoded.copyOfRange(request.from, request.to)
-                //      var header = HttpHeaders()
-//                header.add("status",)
-//                val map = HashMap<String, Any>()
-//                map.put("file",block)
-//                map.put("status",HttpStatus.OK.value())
-//                println("${request.from} - ${request.to}")
                 reply = ResponseEntity(block, HttpStatus.NOT_ACCEPTABLE)
             }
             else -> {
@@ -270,9 +243,6 @@ open class ApiController {
                 reply = ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
             }
         }
-        // val resultFileBlock =
-        var contentType: String = "application/octet-stream"
-
         return reply
     }
 

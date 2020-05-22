@@ -1,11 +1,10 @@
 package com.elcom.ServerFilestorage.model
 
 import java.sql.Timestamp
-import javax.persistence.Column
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
+@Entity
+@Table(name = "data_geo")
 data class DataGeo(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,11 +27,14 @@ data class DataGeo(
         override var timestamp: Timestamp = Timestamp(0),
         @Column(name = "time_received")
         override var timestampReceived: Timestamp = Timestamp(0),
-        val latitude: Int = 0,
-        val longitude: Int = 0,
-        val speed: Int = 0,
-        val angle: Int = 0,
-        val UTC: Int = 0,
-        val flag: Int = 0,
-        val satCount: Int = 0
+        @Column(name = "latitude")
+        val latitude: String = "",
+        @Column(name = "longitude")
+        val longitude: String = "",
+        @Column(name = "alt")
+        val alt: Double = 0.0,
+        @Column(name = "speed")
+        val speed: Double = 0.0,
+        @Column(name = "course")
+        val course: Double = 0.0
 ) : HeaderMeasure()
