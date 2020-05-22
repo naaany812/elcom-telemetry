@@ -50,6 +50,8 @@ $(document).ready(function () {
         console.log("applyed")
         loadEnergy(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
         loadClimate(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
+        loadGeo(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
+        loadRadio(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'), selectedDevice.deviceHwId)
 
     });
     /*     $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
@@ -172,6 +174,81 @@ function loadEnergy(start, end, deviceUid) {
                 cell2.appendChild(newText2)
                 var cell2 = tr.insertCell()
                 var newText2 = document.createTextNode(v.energyPassive)
+                cell2.appendChild(newText2)
+            });
+
+            //     buildCharts(mapClimate, mapPower, mapColor)
+        }
+    );
+}
+
+function loadGeo(start, end, deviceUid) {
+    $("#table_geo tbody tr").remove();
+    $.getJSON("/api/geo?startDate=" + start + "&endDate=" + end + "&deviceUid=" + deviceUid + "",
+        function (data) {
+            var table = document.getElementById('table_geo').getElementsByTagName('tbody')[0];
+            var mapClimate = {}
+            var mapPower = {}
+            var mapColor = {}
+            var cntr = 1
+            // console.log(data.responseData.resultText)
+            $.each(data, function (k, v) {
+                console.log(k, v);
+                // var keys = ["trainType", "trainNumber"];
+                cntr = cntr + 1
+                var tr = table.insertRow()
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(dateFormat(new Date(v.timestamp), 'd-m-Y h:i:s'))
+                cell.appendChild(newText)
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(dateFormat(new Date(v.timestampReceived), 'd-m-Y h:i:s'))
+                cell.appendChild(newText)
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.latitude+", "+v.longitude)
+               // var newText2 = document.createTextNode("${v.rssi}/${v.rssiReverse}")
+                cell2.appendChild(newText2)
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.speed)
+                cell2.appendChild(newText2)
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.alt)
+                cell2.appendChild(newText2)
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.course)
+                cell2.appendChild(newText2)
+            });
+
+            //     buildCharts(mapClimate, mapPower, mapColor)
+        }
+    );
+}
+
+function loadRadio(start, end, deviceUid) {
+    $("#table_radio tbody tr").remove();
+    $.getJSON("/api/radio?startDate=" + start + "&endDate=" + end + "&deviceUid=" + deviceUid + "",
+        function (data) {
+            var table = document.getElementById('table_radio').getElementsByTagName('tbody')[0];
+            var mapClimate = {}
+            var mapPower = {}
+            var mapColor = {}
+            var cntr = 1
+            // console.log(data.responseData.resultText)
+            $.each(data, function (k, v) {
+                console.log(k, v);
+                // var keys = ["trainType", "trainNumber"];
+                cntr = cntr + 1
+                var tr = table.insertRow()
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(dateFormat(new Date(v.timestamp), 'd-m-Y h:i:s'))
+                cell.appendChild(newText)
+                var cell = tr.insertCell()
+                var newText = document.createTextNode(dateFormat(new Date(v.timestampReceived), 'd-m-Y h:i:s'))
+                cell.appendChild(newText)
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.rssi+" / "+v.rssiReverse)
+                cell2.appendChild(newText2)
+                var cell2 = tr.insertCell()
+                var newText2 = document.createTextNode(v.receivedCount+" / "+v.totalCount)
                 cell2.appendChild(newText2)
             });
 

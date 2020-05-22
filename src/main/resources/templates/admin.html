@@ -150,6 +150,7 @@
                                             <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-climate">Температура</a></li>
                                             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-energy">Энергия</a></li>
                                             <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-geo">Геолокация</a></li>
+                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-radio">RSSI</a></li>
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane active" role="tabpanel" id="tab-climate" style="padding-top: 20px;">
@@ -199,18 +200,35 @@
                                                                 <tr style="position: sticky;top: 0;">
                                                                     <th class="text-left bg-secondary" id="trs-hd">Время измерения</th>
                                                                     <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Географические координаты</th>
+                                                                    <th class="text-left bg-secondary" id="trs-hd">Координаты</th>
                                                                     <th class="text-left bg-secondary" id="trs-hd">Скорость</th>
+                                                                    <th class="text-left bg-secondary" id="trs-hd">Высота</th>
                                                                     <th class="text-left bg-secondary" id="trs-hd">Путевой угол</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">UTC</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Количество видимых спутников</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody style="overflow-y: auto;font-size: 10px;"></tbody>
                                                         </table>
                                                     </div>
                                                 </div>
+                                            <div class="tab-pane" role="tabpanel" id="tab-radio" style="padding-top: 20px;">
+                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex" style="/*padding-top: 10px;*/padding: 0px;"><input type="text" id="search_window_geo" class="search form-control col-md-12" placeholder="Введите для поиска"><span id="counter_window_geo" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
+                                                <div
+                                                        class="table-responsive table-borderless table results" id="table_radio" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                                        <tr style="position: sticky;top: 0;">
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время измерения</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">RSSI (прямой/обратный)</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Пакеты (получено/всего)</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody style="overflow-y: auto;font-size: 10px;"></tbody>
+                                                    </table>
+                                                </div>
                                             </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
