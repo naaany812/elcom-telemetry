@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.2.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
+    id("org.flywaydb.flyway") version "6.4.2"
     kotlin("jvm") version "1.3.61"
     kotlin("plugin.spring") version "1.3.61"
     kotlin("plugin.jpa") version "1.3.50"
@@ -57,4 +58,11 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
+}
+
+flyway {
+    url = "jdbc:postgresql://localhost:5432/telemetry"
+    user = "postgres"
+    password = "postgres"
+    schemas = Array<String>(1) { "public" }
 }
