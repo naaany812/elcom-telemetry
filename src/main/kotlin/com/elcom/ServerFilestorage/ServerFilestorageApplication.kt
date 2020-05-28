@@ -9,7 +9,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 
 
-@SpringBootApplication(scanBasePackages = ["com.elcom.ServerFilestorage.storage", "com.elcom.ServerFilestorage"])
+@SpringBootApplication(scanBasePackages = ["com.elcom.ServerFilestorage.storage", "com.elcom.ServerFilestorage", "com.elcom.ServerFilestorage.utils"])
 @EnableConfigurationProperties(StorageProperties::class)
 class ServerFilestorageApplication
 

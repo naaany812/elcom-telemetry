@@ -259,11 +259,11 @@ open class ApiController {
                 var dev = deviceRepository.getFirstDeviceByUid(request.UID)
                 var fileData = filesService.getOne(dev!!.swId!!)
 
-                val file: Resource = storageService.loadAsResource(fileData.name)
+                val file: Resource = storageService.loadAsResource("${fileData.version}_${fileData.name}")
                 val fileEncoded = Files.readAllBytes(file.file.toPath())
                 val block = fileEncoded.copyOfRange(request.from, request.to)
                 println("${request.from} - ${request.to}")
-                reply = ReplyFile(0, String(block), HttpStatus.OK.value())
+                reply = ReplyFile(CRC.crc8(block,0,block.size).toLong(), String(block), HttpStatus.OK.value())
             }
             else -> {
                 println(request)
@@ -326,13 +326,15 @@ open class ApiController {
     @PostMapping("/uploadFile")
     @ResponseBody
     fun uploadFile(@RequestParam("file") file: MultipartFile, @RequestParam("version") version: Int): Reply {
-        storageService.store(file)
+
         val fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
-                .path(file.name)
+                .path("${version}_${file.name}")
                 .toUriString()
-        val fileData: FileData = FileData(name = file.originalFilename!!, version = version, size = file.size)
+        val fileData = FileData(name = file.originalFilename!!, version = version, size = file.size)
         filesService.save(fileData)
+        //="${version}_${file.name}";
+        storageService.store(file, version)
 //        redirectAttributes.addFlashAttribute("message",
 //                "You successfully uploaded " + file.originalFilename + "!")
         return Reply(System.currentTimeMillis(), HttpStatus.OK.value())

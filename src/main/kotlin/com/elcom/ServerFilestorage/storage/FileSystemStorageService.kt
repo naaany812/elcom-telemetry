@@ -24,8 +24,9 @@ import java.util.stream.Stream
 @Service
 open class FileSystemStorageService constructor( @Autowired properties: StorageProperties) : StorageService {
     private val rootLocation: Path
-    override fun store(file: MultipartFile) {
-        val filename = StringUtils.cleanPath(file.originalFilename!!)
+    override fun store(file: MultipartFile, version: Int) {
+        val filename = "${version}_${StringUtils.cleanPath(file.originalFilename!!)}"
+        println("Storing file $filename")
         try {
             if (file.isEmpty) {
                 throw StorageException("Failed to store empty file $filename")

@@ -1,7 +1,10 @@
 package com.elcom.ServerFilestorage.utils;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class CRC {
-    public byte crc8(byte[] data, int offset, int end){
+    public static byte crc8(byte[] data, int offset, int end){
         byte crc = (byte)0xFF;
         for(int num = offset; num < end; ++num){
             crc ^= data[num];
