@@ -39,13 +39,20 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Выбор электровоза</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                        <h4 class="modal-title">Выбор электровоза</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
                     <div class="modal-body">
                         <div class="row" style="margin-bottom: 15px;">
-                            <div class="col"><input type="text" id="search_modal" class="search form-control" placeholder="Введите для поиска"></div>
-                            <div class="col d-flex align-items-center"><span id="counter_modal" class="counter pull-left">Результаты</span></div>
+                            <div class="col"><input type="text" id="search_modal" class="search form-control"
+                                                    placeholder="Введите для поиска"></div>
+                            <div class="col d-flex align-items-center"><span id="counter_modal"
+                                                                             class="counter pull-left">Результаты</span>
+                            </div>
                         </div>
-                        <div class="table-responsive table-borderless table table-hover table-bordered results" id="table_modal" style="overflow-y: auto;overflow-x: auto;height: 300px;">
+                        <div class="table-responsive table-borderless table table-hover table-bordered results"
+                             id="table_modal" style="overflow-y: auto;overflow-x: auto;height: 300px;">
                             <table class="table table-bordered table-hover">
                                 <thead class="bg-primary bill-header cs" style="background-color: transparent;">
                                 <tr style="position: sticky;top: 0;">
@@ -63,11 +70,14 @@
         </div>
     </div>
 </nav>
-<main class="page service-page" style="background-color: #f6f6f6;min-height: 100vh;/*min-width: 100vw;*/padding-top: 120px;">
-    <section class="clean-block clean-services dark" style="padding-bottom: 50px;width: 100%;background-color: rgba(246,246,246,0);">
+<main class="page service-page"
+      style="background-color: #f6f6f6;min-height: 100vh;/*min-width: 100vw;*/padding-top: 120px;">
+    <section class="clean-block clean-services dark"
+             style="padding-bottom: 50px;width: 100%;background-color: rgba(246,246,246,0);">
         <div class="text-center">
             <ul class="nav nav-tabs nav-fill text-center">
-                <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">Составы</a></li>
+                <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">Составы</a>
+                </li>
                 <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-2">Измерения</a></li>
                 <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-3">Файлы</a></li>
             </ul>
@@ -77,17 +87,31 @@
                         <div class="row" style="margin-bottom: 40px;">
                             <div class="col-md-4 col-md-5 align-items-center" style="min-height: 40vh;">
                                 <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
-                                    <div class="col d-flex col-md-12 align-items-center" style="height: 38px;"><span class="d-xl-flex justify-content-xl-end" id="train_nameholder">Электропоезд</span></div>
+                                    <div class="col d-flex col-md-12 align-items-center" style="height: 38px;"><span
+                                            class="d-xl-flex justify-content-xl-end"
+                                            id="train_nameholder">Электропоезд</span></div>
                                 </div>
                                 <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
-                                    <div class="col d-flex col-md-6 align-items-center" style="height: 38px;"><input type="text" id="search_trains" class="search form-control col-md-12" placeholder="Введите для поиска" style="width: 200px;"></div>
-                                    <div class="col d-flex col-md-4 align-items-center" style="height: 38px;"><span id="counter_trains" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
+                                    <div class="col d-flex col-md-6 align-items-center" style="height: 38px;"><input
+                                            type="text" id="search_trains" class="search form-control col-md-12"
+                                            placeholder="Введите для поиска" style="width: 200px;"></div>
+                                    <div class="col d-flex col-md-4 align-items-center" style="height: 38px;"><span
+                                            id="counter_trains" class="counter col-md-12"
+                                            style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
+                                    </div>
                                     <div class="col col-md-2 align-items-center d-flex justify-content-xl-end"
-                                         style="height: 38px;"><button class="btn btn-info d-flex align-items-center" id="button_add_train" style="padding: 6px;" data-target="#modal_add_train" data-toggle="modal"><i class="fa fa-plus" style="margin: 0px;"></i></button></div>
+                                         style="height: 38px;">
+                                        <button class="btn btn-info d-flex align-items-center" id="button_add_train"
+                                                style="padding: 6px;" data-target="#modal_add_train"
+                                                data-toggle="modal"><i class="fa fa-plus" style="margin: 0px;"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="table-responsive table-borderless table results" id="table_trains" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                <div class="table-responsive table-borderless table results" id="table_trains"
+                                     style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
                                     <table class="table table-bordered table-hover">
-                                        <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                        <thead class="bg-primary bill-header cs"
+                                               style="background-color: transparent;font-size: 12px;">
                                         <tr style="position: sticky;top: 0;">
                                             <th class="text-left bg-secondary" id="trs-hd">Тип</th>
                                             <th class="text-left bg-secondary" id="trs-hd">Номер</th>
@@ -108,14 +132,25 @@
                             <div class="col-md-4 col-md-7 align-items-center" style="min-height: 40vh;">
                                 <div class="row" style="margin-top: 20px;margin-bottom: 20px;height: 38px;"></div>
                                 <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
-                                    <div class="col d-flex col-md-5 align-items-center" style="height: 38px;"><input type="text" id="search_devices" class="search form-control col-md-12" placeholder="Введите для поиска" style="width: 200px;"></div>
-                                    <div class="col d-flex col-md-5 align-items-center" style="height: 38px;"><span id="counter_devices" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
+                                    <div class="col d-flex col-md-5 align-items-center" style="height: 38px;"><input
+                                            type="text" id="search_devices" class="search form-control col-md-12"
+                                            placeholder="Введите для поиска" style="width: 200px;"></div>
+                                    <div class="col d-flex col-md-5 align-items-center" style="height: 38px;"><span
+                                            id="counter_devices" class="counter col-md-12"
+                                            style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
+                                    </div>
                                     <div class="col col-md-2 align-items-center d-flex justify-content-xl-end"
-                                         style="height: 38px;"><button class="btn btn-info d-flex align-items-center" id="button_add_device" style="padding: 6px;"><i class="fa fa-plus" id="fa_fa_btn" style="margin: 0px;"></i></button></div>
+                                         style="height: 38px;">
+                                        <button class="btn btn-info d-flex align-items-center" id="button_add_device"
+                                                style="padding: 6px;"><i class="fa fa-plus" id="fa_fa_btn"
+                                                                         style="margin: 0px;"></i></button>
+                                    </div>
                                 </div>
-                                <div class="table-responsive table-borderless table results" id="table_devices" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                <div class="table-responsive table-borderless table results" id="table_devices"
+                                     style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
                                     <table class="table table-bordered table-hover">
-                                        <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                        <thead class="bg-primary bill-header cs"
+                                               style="background-color: transparent;font-size: 12px;">
                                         <tr style="position: sticky;top: 0;">
                                             <th class="text-left bg-secondary" id="trs-hd">№ Вагона</th>
                                             <th class="text-left bg-secondary" id="trs-hd">Вагон</th>
@@ -134,35 +169,58 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" role="tabpanel" id="tab-2">
-                    <section class="clean-block clean-services dark" style="width: 100%;background-color: rgba(246,246,246,0);">
+                    <section class="clean-block clean-services dark"
+                             style="width: 100%;background-color: rgba(246,246,246,0);">
                         <div class="container">
                             <div class="row" style="margin-bottom: 40px;">
                                 <div class="col-md-4 d-flex align-items-center">
-                                    <span class="d-xl-flex justify-content-xl-end" id="device_nameholder">Устройство</span></div>
+                                    <span class="d-xl-flex justify-content-xl-end"
+                                          id="device_nameholder">Устройство</span></div>
                                 <div class="col-md-6 d-flex align-items-center" style="padding: 17px;">
-                                    <label class="d-xl-flex justify-content-xl-end" for="reportrange" style="padding: 6px 12px; margin-top: 10px;">Фильтр по дате: </label>
-                                    <input type="text" id="reportrange" style="padding: 6px 12px;" name="reportrange"></div>
+                                    <label class="d-xl-flex justify-content-xl-end" for="reportrange"
+                                           style="padding: 6px 12px; margin-top: 10px;">Фильтр по дате: </label>
+                                    <input type="text" id="reportrange" style="padding: 6px 12px;" name="reportrange">
+                                </div>
                                 <div class="col-md-3"></div>
                             </div>
                             <div class="row d-flex justify-content-center">
                                 <div class="col col-md-8" style="min-height: 20vh;">
                                     <div>
                                         <ul class="nav nav-tabs">
-                                            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-climate">Температура</a></li>
-                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-energy">Энергия</a></li>
-                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-geo">Геолокация</a></li>
-                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-radio">RSSI</a></li>
+                                            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab"
+                                                                    href="#tab-climate">Температура</a></li>
+                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab"
+                                                                    href="#tab-energy">Энергия</a></li>
+                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab"
+                                                                    href="#tab-geo">Геолокация</a></li>
+                                            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab"
+                                                                    href="#tab-radio">RSSI</a></li>
                                         </ul>
                                         <div class="tab-content">
-                                            <div class="tab-pane active" role="tabpanel" id="tab-climate" style="padding-top: 20px;">
-                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex" style="/*padding-top: 10px;*/padding: 0px;"><input type="text" id="search_window_climate" class="search form-control col-md-12" placeholder="Введите для поиска"><span id="counter_window_climate" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
+                                            <div class="tab-pane active" role="tabpanel" id="tab-climate"
+                                                 style="padding-top: 20px;">
+                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex"
+                                                     style="/*padding-top: 10px;*/padding: 0px;"><input type="text"
+                                                                                                        id="search_window_climate"
+                                                                                                        class="search form-control col-md-12"
+                                                                                                        placeholder="Введите для поиска"><span
+                                                        id="counter_window_climate" class="counter col-md-12"
+                                                        style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
+                                                </div>
                                                 <div
-                                                        class="table-responsive table-borderless table results" id="table_climate" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                                        class="table-responsive table-borderless table results"
+                                                        id="table_climate"
+                                                        style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
                                                     <table class="table table-bordered table-hover">
-                                                        <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                                        <thead class="bg-primary bill-header cs"
+                                                               style="background-color: transparent;font-size: 12px;">
                                                         <tr style="position: sticky;top: 0;">
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время измерения</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                измерения
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                получения
+                                                            </th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Канал 1</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Канал 2</th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Канал 3</th>
@@ -173,64 +231,120 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane" role="tabpanel" id="tab-energy" style="padding-top: 20px;">
-                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex" style="/*padding-top: 10px;*/padding: 0px;"><input type="text" id="search_window_energy" class="search form-control col-md-12" placeholder="Введите для поиска"><span id="counter_window_energy" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
+                                            <div class="tab-pane" role="tabpanel" id="tab-energy"
+                                                 style="padding-top: 20px;">
+                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex"
+                                                     style="/*padding-top: 10px;*/padding: 0px;"><input type="text"
+                                                                                                        id="search_window_energy"
+                                                                                                        class="search form-control col-md-12"
+                                                                                                        placeholder="Введите для поиска"><span
+                                                        id="counter_window_energy" class="counter col-md-12"
+                                                        style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
+                                                </div>
                                                 <div
-                                                        class="table-responsive table-borderless table results" id="table_energy" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                                        class="table-responsive table-borderless table results"
+                                                        id="table_energy"
+                                                        style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
                                                     <table class="table table-bordered table-hover">
-                                                        <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                                        <thead class="bg-primary bill-header cs"
+                                                               style="background-color: transparent;font-size: 12px;">
                                                         <tr style="position: sticky;top: 0;">
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время измерения</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                измерения
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                получения
+                                                            </th>
                                                             <th class="text-left bg-secondary" id="trs-hd">Ток</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Напряжение</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Активная эенергия</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Реактивная энергия</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Напряжение
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Активная
+                                                                эенергия
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Реактивная
+                                                                энергия
+                                                            </th>
                                                         </tr>
                                                         </thead>
                                                         <tbody style="overflow-y: auto;font-size: 10px;"></tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane" role="tabpanel" id="tab-geo" style="padding-top: 20px;">
-                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex" style="/*padding-top: 10px;*/padding: 0px;"><input type="text" id="search_window_geo" class="search form-control col-md-12" placeholder="Введите для поиска"><span id="counter_window_geo" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
-                                                    <div
-                                                        class="table-responsive table-borderless table results" id="table_geo" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
-                                                        <table class="table table-bordered table-hover">
-                                                            <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
-                                                                <tr style="position: sticky;top: 0;">
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Время измерения</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Координаты</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Скорость</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Высота</th>
-                                                                    <th class="text-left bg-secondary" id="trs-hd">Путевой угол</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody style="overflow-y: auto;font-size: 10px;"></tbody>
-                                                        </table>
-                                                    </div>
+                                            <div class="tab-pane" role="tabpanel" id="tab-geo"
+                                                 style="padding-top: 20px;">
+                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex"
+                                                     style="/*padding-top: 10px;*/padding: 0px;"><input type="text"
+                                                                                                        id="search_window_geo"
+                                                                                                        class="search form-control col-md-12"
+                                                                                                        placeholder="Введите для поиска"><span
+                                                        id="counter_window_geo" class="counter col-md-12"
+                                                        style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
                                                 </div>
-                                            <div class="tab-pane" role="tabpanel" id="tab-radio" style="padding-top: 20px;">
-                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex" style="/*padding-top: 10px;*/padding: 0px;"><input type="text" id="search_window_geo" class="search form-control col-md-12" placeholder="Введите для поиска"><span id="counter_window_geo" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
                                                 <div
-                                                        class="table-responsive table-borderless table results" id="table_radio" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                                        class="table-responsive table-borderless table results"
+                                                        id="table_geo"
+                                                        style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
                                                     <table class="table table-bordered table-hover">
-                                                        <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                                        <thead class="bg-primary bill-header cs"
+                                                               style="background-color: transparent;font-size: 12px;">
                                                         <tr style="position: sticky;top: 0;">
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время измерения</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Время получения</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">RSSI (прямой/обратный)</th>
-                                                            <th class="text-left bg-secondary" id="trs-hd">Пакеты (получено/всего)</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                измерения
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                получения
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Координаты
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Скорость</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Высота</th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Путевой
+                                                                угол
+                                                            </th>
                                                         </tr>
                                                         </thead>
                                                         <tbody style="overflow-y: auto;font-size: 10px;"></tbody>
                                                     </table>
                                                 </div>
                                             </div>
+                                            <div class="tab-pane" role="tabpanel" id="tab-radio"
+                                                 style="padding-top: 20px;">
+                                                <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex"
+                                                     style="/*padding-top: 10px;*/padding: 0px;"><input type="text"
+                                                                                                        id="search_window_geo"
+                                                                                                        class="search form-control col-md-12"
+                                                                                                        placeholder="Введите для поиска"><span
+                                                        id="counter_window_geo" class="counter col-md-12"
+                                                        style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
+                                                </div>
+                                                <div
+                                                        class="table-responsive table-borderless table results"
+                                                        id="table_radio"
+                                                        style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead class="bg-primary bill-header cs"
+                                                               style="background-color: transparent;font-size: 12px;">
+                                                        <tr style="position: sticky;top: 0;">
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                измерения
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Время
+                                                                получения
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">RSSI
+                                                                (прямой/обратный)
+                                                            </th>
+                                                            <th class="text-left bg-secondary" id="trs-hd">Пакеты
+                                                                (получено/всего)
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody style="overflow-y: auto;font-size: 10px;"></tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -238,22 +352,40 @@
                     </section>
                 </div>
                 <div class="tab-pane fade" role="tabpanel" id="tab-3">
-                    <section class="clean-block clean-services dark" style="width: 100%;background-color: rgba(246,246,246,0);">
+                    <section class="clean-block clean-services dark"
+                             style="width: 100%;background-color: rgba(246,246,246,0);">
                         <div class="container">
                             <div class="row" style="margin-bottom: 40px;">
-                                <div class="col d-flex align-items-center col-md-9"><input type="number" id="version_input" style="padding: 0;margin: 17px;" value="0">
-                                    <form id="upload_form" name="upload_form"><input type="file" id="upload_file" name="file"><button class="btn btn-primary submit-btn" id="submit_file" type="submit" style="margin: 17px;">Загрузить файл</button></form>
+                                <div class="col d-flex align-items-center col-md-9"><input type="number"
+                                                                                           id="version_input"
+                                                                                           style="padding: 0;margin: 17px;"
+                                                                                           value="0">
+                                    <form id="upload_form" name="upload_form"><input type="file" id="upload_file"
+                                                                                     name="file">
+                                        <button class="btn btn-primary submit-btn" id="submit_file" type="submit"
+                                                style="margin: 17px;">Загрузить файл
+                                        </button>
+                                    </form>
                                 </div>
                                 <div class="col"></div>
                                 <div class="col d-xl-flex justify-content-xl-end d-flex align-items-right col-md-3"></div>
                             </div>
                             <div class="row d-flex justify-content-center">
                                 <div class="col">
-                                    <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex" style="/*padding-top: 10px;*/padding: 0px;"><input type="text" id="search_window" class="search form-control col-md-12" placeholder="Введите для поиска"><span id="counter_window" class="counter col-md-12" style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span></div>
+                                    <div class="d-xl-flex justify-content-xl-start form-group pull-left col-lg-5 d-flex"
+                                         style="/*padding-top: 10px;*/padding: 0px;"><input type="text"
+                                                                                            id="search_window"
+                                                                                            class="search form-control col-md-12"
+                                                                                            placeholder="Введите для поиска"><span
+                                            id="counter_window" class="counter col-md-12"
+                                            style="padding-top: 6px;padding-bottom: 6px;margin-left: 7px;">Результаты</span>
+                                    </div>
                                     <div
-                                            class="table-responsive table-borderless table results" id="table_software" style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
+                                            class="table-responsive table-borderless table results" id="table_software"
+                                            style="max-height: 60vh;overflow-y: auto;overflow-x: auto;">
                                         <table class="table table-bordered table-hover">
-                                            <thead class="bg-primary bill-header cs" style="background-color: transparent;font-size: 12px;">
+                                            <thead class="bg-primary bill-header cs"
+                                                   style="background-color: transparent;font-size: 12px;">
                                             <tr style="position: sticky;top: 0;">
                                                 <th class="text-left bg-secondary" id="trs-hd">Имя</th>
                                                 <th class="text-left bg-secondary" id="trs-hd">Версия</th>
@@ -281,9 +413,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Выбор прошивки</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">Выбор прошивки</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
             <div class="modal-body"><select class="custom-select" id="software_modal_list"></select></div>
-            <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Закрыть</button><button class="btn btn-primary" id="button_update_file" type="button">Обновить</button></div>
+            <div class="modal-footer">
+                <button class="btn btn-light" type="button" data-dismiss="modal">Закрыть</button>
+                <button class="btn btn-primary" id="button_update_file" type="button">Обновить</button>
+            </div>
         </div>
     </div>
 </div>
@@ -291,17 +429,35 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Добавление электропоезда</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">Добавление электропоезда</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col col-md-4 d-flex"><input type="text" id="train_type" placeholder="Тип" style="max-width: 100%;padding: 6;padding-top: 6px;padding-right: 12px;padding-bottom: 6px;padding-left: 12px;/*margin-right: 10px;*/"></div>
-                    <div class="col col-md-4 d-flex"><input type="text" id="train_number" placeholder="Номер" style="max-width: 100%;padding: 6;padding-top: 6px;padding-right: 12px;padding-bottom: 6px;padding-left: 12px;/*margin-right: 10px;*/"></div>
+                    <div class="col col-md-4 d-flex"><input type="text" id="train_type" placeholder="Тип"
+                                                            style="max-width: 100%;padding: 6;padding-top: 6px;padding-right: 12px;padding-bottom: 6px;padding-left: 12px;/*margin-right: 10px;*/">
+                    </div>
+                    <div class="col col-md-4 d-flex"><input type="text" id="train_number" placeholder="Номер"
+                                                            style="max-width: 100%;padding: 6;padding-top: 6px;padding-right: 12px;padding-bottom: 6px;padding-left: 12px;/*margin-right: 10px;*/">
+                    </div>
                     <div class="col col-md-4 d-flex">
-                        <select class="custom-select" id="train_car_count" style="width: 100%;padding-right: 12px;padding-bottom: 12px;padding-top: 6px;padding-left: 12px;"><option value="4">4 вагона</option><option value="6">6 вагонов</option><option value="8">8 вагонов</option><option value="10">10 вагонов</option><option value="12">12 вагонов</option><option value="9">9 вагонов</option><option value="11">11 вагонов</option></select>
+                        <select class="custom-select" id="train_car_count"
+                                style="width: 100%;padding-right: 12px;padding-bottom: 12px;padding-top: 6px;padding-left: 12px;">
+                            <option value="4">4 вагона</option>
+                            <option value="6">6 вагонов</option>
+                            <option value="8">8 вагонов</option>
+                            <option value="10">10 вагонов</option>
+                            <option value="12">12 вагонов</option>
+                            <option value="9">9 вагонов</option>
+                            <option value="11">11 вагонов</option>
+                        </select>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer"><button class="btn btn-primary" id="button_save_train" type="button">Сохранить</button></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="button_save_train" type="button">Сохранить</button>
+            </div>
         </div>
     </div>
 </div>
@@ -309,12 +465,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Добавление устройства</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <h4 class="modal-title">Добавление устройства</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col col-md-6"><input type="text" id="text_device_id" placeholder="ID устройства" value=""></div>
+                    <div class="col col-md-6"><input type="text" id="text_device_id" placeholder="ID устройства"
+                                                     value=""></div>
                     <div class="col d-flex align-items-center col-md-6">
-                        <div class="custom-control custom-switch custom-control custom-checkbox"><input class="custom-control-input" type="checkbox" id="checkbox_head" name="checkbox_head"><label class="custom-control-label" for="checkbox_head">Головное</label></div>
+                        <div class="custom-control custom-switch custom-control custom-checkbox"><input
+                                class="custom-control-input" type="checkbox" id="checkbox_head"
+                                name="checkbox_head"><label class="custom-control-label"
+                                                            for="checkbox_head">Головное</label></div>
                     </div>
                 </div>
                 <div class="row" style="padding-top: 15px;">
@@ -324,22 +487,40 @@
                 <div class="row" style="padding-top: 15px;">
                     <div class="col">
                         <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text">Загрузить</span></div><input class="form-control file-input" type="text">
-                            <div class="input-group-append"><button class="btn btn-primary" type="button">Go!</button></div>
+                            <div class="input-group-prepend"><span class="input-group-text">Загрузить</span></div>
+                            <input class="form-control file-input" type="text">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">Go!</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
-                    <div class="col col-md-6"><input type="number" min="0" id="text_car_number" placeholder="Номер вагона" value=""></div>
-                    <div class="col col-md-6"><select class="custom-select" id="select_car_types"><option value="PG" selected="">ПГ</option><option value="MP">МП</option><option value="PP">ПП</option></select></div>
+                    <div class="col col-md-6"><input type="number" min="0" id="text_car_number"
+                                                     placeholder="Номер вагона" value=""></div>
+                    <div class="col col-md-6"><select class="custom-select" id="select_car_types">
+                        <option value="PG" selected="">ПГ</option>
+                        <option value="MP">МП</option>
+                        <option value="PP">ПП</option>
+                    </select></div>
                 </div>
                 <div class="row" style="margin-top: 15px;">
-                    <div class="col col-md-6"><select class="custom-select" id="select_device_types"><option value="БИУ" selected="">БИУ</option><option value="БСГ">БСГ</option><option value="БКТ">БКТ</option><option value="БКТЭ">БКТЭ</option><option value="ДТ">ДТ</option><option value="МУО">МУО</option><option value="МИВ">МИВ</option></select></div>
+                    <div class="col col-md-6"><select class="custom-select" id="select_device_types">
+                        <option value="БИУ" selected="">БИУ</option>
+                        <option value="БСГ">БСГ</option>
+                        <option value="БКТ">БКТ</option>
+                        <option value="БКТЭ">БКТЭ</option>
+                        <option value="ДТ">ДТ</option>
+                        <option value="МУО">МУО</option>
+                        <option value="МИВ">МИВ</option>
+                    </select></div>
                     <div
                             class="col col-md-6"><label class="col-form-label">Тип устройства</label></div>
                 </div>
             </div>
-            <div class="modal-footer"><button class="btn btn-primary" id="button_save_device" type="button">Сохранить</button></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="button_save_device" type="button">Сохранить</button>
+            </div>
         </div>
     </div>
 </div>
