@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.codec.Hex
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -262,12 +263,16 @@ open class ApiController {
                 val file: Resource = storageService.loadAsResource("${fileData.version}_${fileData.name}")
                 val fileEncoded = Files.readAllBytes(file.file.toPath())
                 val block = fileEncoded.copyOfRange(request.from, request.to)
-                println("${request.from} - ${request.to}")
-                reply = ReplyFile(CRC.crc8(block,0,block.size).toLong(), String(block), HttpStatus.OK.value())
+            /*    var test = CRC.crc8("var measures".toByteArray(),0,"var measures".length)
+                println("CRC: $test")*/
+               // println("${request.from} - ${request.to}")
+                var stringCrc = String(Hex.encode(byteArrayOf(CRC.crc8(block,0,block.size))))
+                println(stringCrc)
+                reply = ReplyFile(stringCrc, String(block), HttpStatus.OK.value())
             }
             else -> {
                 println(request)
-                reply = ReplyFile(0, "$request", HttpStatus.NOT_ACCEPTABLE.value())
+                reply = ReplyFile("00", "$request", HttpStatus.NOT_ACCEPTABLE.value())
             }
         }
 
